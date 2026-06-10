@@ -7,3 +7,9 @@ out/
 local.properties
 .gradle/
 builds/
+build/classes/kotlin/main/
+build/generated/
+build/outputs/
+*.kts
+cache/
+.vscode/
