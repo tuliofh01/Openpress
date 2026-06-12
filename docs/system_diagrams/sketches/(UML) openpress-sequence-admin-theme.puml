@@ -1,0 +1,41 @@
+@startuml
+title Openpress — Admin Theme Customization & Angular Rendering
+
+actor "Admin" as admin
+actor "Angular App" as angular
+participant "AdminController" as ctrl #FEF2F2
+participant "AdminService" as svc #FFF7ED
+participant "SettingRepository" as repo #EFF6FF
+database "Database" as db #FAF5FF
+
+== Admin configures theme ==
+
+admin -> ctrl: PUT /admin/theme { primaryColor, font, logo, ... }
+ctrl -> svc: applyTheme(config)
+note right: ThemeConfig data class
+svc -> repo: upsert("theme.primary_color", "#3B82F6")
+repo -> db: INSERT OR UPDATE settings
+svc -> repo: upsert("theme.font_family", "Inter, sans-serif")
+repo -> db: INSERT OR UPDATE settings
+svc -> repo: upsert("site.title", "My Store")
+repo -> db: INSERT OR UPDATE settings
+svc --> ctrl: ThemeConfig applied
+ctrl --> admin: 200 OK + { preview_url }
+
+== Angular fetches theme on load ==
+
+angular -> ctrl: GET /api/theme-config
+ctrl -> svc: getThemeConfig()
+svc -> repo: findAll()
+repo -> db: SELECT * FROM settings
+db --> repo: List<Setting>
+repo --> svc: raw key-value pairs
+svc -> svc: Assemble ThemeConfig from Setting list
+svc --> ctrl: ThemeConfig
+ctrl --> angular: 200 OK + ThemeConfig JSON
+
+angular -> angular: Apply CSS custom properties
+note right: document.documentElement\n  .style.setProperty(\n  '--primary', config.primaryColor)
+angular -> angular: Update <title> tag
+angular -> angular: Render logo from config.logoUrl
+@enduml

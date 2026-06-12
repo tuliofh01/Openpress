@@ -1,0 +1,94 @@
+@startuml
+title Openpress — Use Case Overview
+
+skinparam backgroundColor #F8FAFC
+skinparam defaultFontName Helvetica
+skinparam useCaseBorderColor #475569
+skinparam useCaseBackgroundColor #FFFFFF
+skinparam actorBorderColor #1E293B
+skinparam actorBackgroundColor #E2E8F0
+skinparam arrowColor #475569
+
+left to right direction
+
+actor "Visitor" as visitor
+actor "User" as user
+actor "Author" as author
+actor "Clerk" as clerk
+actor "Admin" as admin
+
+rectangle "Openpress Platform" {
+  ' Visitor use cases
+  usecase "Browse Products\n& Categories" as UC1
+  usecase "View Blog Posts" as UC2
+  usecase "Register Account" as UC3
+  usecase "Search Content" as UC4
+
+  ' Authenticated user use cases
+  usecase "Log In" as UC5
+  usecase "Manage Cart" as UC6
+  usecase "Place Order" as UC7
+  usecase "View Order History" as UC8
+  usecase "Write Comments" as UC9
+  usecase "Manage Profile" as UC10
+
+  ' Author use cases
+  usecase "Create & Edit\nPosts" as UC11
+  usecase "Manage Comments\n(moderate)" as UC12
+  usecase "Organize Posts\n(categories/tags)" as UC13
+
+  ' Clerk use cases
+  usecase "Manage Products\n(CRUD)" as UC14
+  usecase "Manage Stock\nLevels" as UC15
+  usecase "Process Orders" as UC16
+  usecase "Manage Product\nCategories" as UC17
+
+  ' Admin use cases
+  usecase "Manage Users\n(CRUD + roles)" as UC18
+  usecase "View System\nLogs" as UC19
+  usecase "Configure\nSite Settings" as UC20
+  usecase "Customize\nTheme & Layout" as UC21
+  usecase "Manage All\nContent" as UC22
+  usecase "View Dashboard\nAnalytics" as UC23
+}
+
+' Visitor relationships
+visitor --> UC1
+visitor --> UC2
+visitor --> UC3
+visitor --> UC4
+visitor --> UC5
+
+' User relationships
+user --> UC5
+user --> UC6
+user --> UC7
+user --> UC8
+user --> UC9
+user --> UC10
+
+' Author relationships (extends User)
+author --> UC5
+author --> UC11
+author --> UC12
+author --> UC13
+
+' Clerk relationships (extends User)
+clerk --> UC5
+clerk --> UC14
+clerk --> UC15
+clerk --> UC16
+clerk --> UC17
+
+' Admin relationships (extends all)
+admin --> UC5
+admin --> UC11
+admin --> UC14
+admin --> UC15
+admin --> UC18
+admin --> UC19
+admin --> UC20
+admin --> UC21
+admin --> UC22
+admin --> UC23
+@enduml

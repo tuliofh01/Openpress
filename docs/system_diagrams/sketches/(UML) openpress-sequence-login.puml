@@ -1,0 +1,29 @@
+@startuml
+title Openpress — Login Authentication Flow
+
+actor "User" as user
+actor "Browser" as browser
+participant "AuthController" as ctrl #FEF2F2
+participant "AuthService" as svc #FFF7ED
+participant "UserRepository" as repo #EFF6FF
+database "Database" as db #FAF5FF
+
+user -> browser: Enter email + password
+browser -> ctrl: POST /auth/login { email, password }
+ctrl -> svc: login(email, password)
+svc -> repo: findByEmail(email)
+repo -> db: SELECT * FROM users WHERE email = ?
+db --> repo: User row
+repo --> svc: User?
+alt User found & password matches
+  svc -> svc: Generate JWT token (HMAC256)
+  svc --> ctrl: JWT token
+  ctrl --> browser: 200 OK + { token, user }
+  browser -> browser: Store JWT in localStorage
+  browser --> user: Redirect to dashboard
+else User not found / wrong password
+  svc --> ctrl: Unauthorized
+  ctrl --> browser: 401 Unauthorized
+  browser --> user: Show error message
+end
+@enduml

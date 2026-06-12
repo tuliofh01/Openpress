@@ -1,0 +1,693 @@
+@startuml
+scale 0.85
+skinparam backgroundColor #F8FAFC
+skinparam defaultFontName Helvetica
+skinparam defaultFontSize 10
+skinparam shadowing true
+skinparam packageBorderColor #CBD5E1
+skinparam packageBorderThickness 1
+skinparam packageCornerRadius 8
+skinparam packageFontSize 13
+skinparam packageFontColor #1E293B
+skinparam packageFontStyle bold
+
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #475569
+  BorderThickness 1
+  FontSize 10
+  FontColor #1E293B
+}
+
+skinparam interface {
+  BackgroundColor #EFF6FF
+  BorderColor #3B82F6
+  BorderThickness 1
+  FontSize 10
+}
+
+hide empty fields
+left to right direction
+
+' ===========================================
+' ENUMS
+' ===========================================
+enum UserRoles {
+  ADMIN
+  AUTHOR
+  CLERK
+  USER
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum StockMovementType {
+  RESTOCK
+  SALE
+  ADJUSTMENT
+  RETURN
+}
+
+' ===========================================
+' PACKAGE: MODEL
+' ===========================================
+package "Model\n(data classes)" as MODEL #F0FDF4 {
+  class User {
+    + id: Int
+    + email: String
+    + username: String
+    + passwordHash: String
+    + displayName: String
+    + role: UserRoles
+    + authStatus: Boolean
+    + avatarUrl: String?
+    + createdAt: Timestamp
+    + updatedAt: Timestamp
+  }
+
+  class Permission {
+    + id: Int
+    + name: String
+    + slug: String
+    + description: String?
+  }
+
+  class RolePermission {
+    + role: UserRoles
+    + permissionId: Int
+  }
+
+  class Address {
+    + id: Int
+    + userId: Int
+    + label: String
+    + street: String
+    + city: String
+    + state: String
+    + zipCode: String
+    + country: String
+    + isDefault: Boolean
+  }
+
+  class Post {
+    + id: Int
+    + title: String
+    + slug: String
+    + content: String
+    + excerpt: String?
+    + featuredImageUrl: String?
+    + authorId: Int
+    + isPublished: Boolean
+    + publishedAt: Timestamp?
+    + createdAt: Timestamp
+    + updatedAt: Timestamp
+  }
+
+  class PostCategory {
+    + id: Int
+    + name: String
+    + slug: String
+    + description: String?
+  }
+
+  class PostCategoryMap {
+    + postId: Int
+    + categoryId: Int
+  }
+
+  class Tag {
+    + id: Int
+    + name: String
+    + slug: String
+  }
+
+  class PostTag {
+    + postId: Int
+    + tagId: Int
+  }
+
+  class Comment {
+    + id: Int
+    + postId: Int
+    + authorId: Int
+    + parentId: Int?
+    + content: String
+    + isApproved: Boolean
+    + createdAt: Timestamp
+  }
+
+  class Category {
+    + id: Int
+    + name: String
+    + slug: String
+    + description: String?
+    + imageUrl: String?
+    + parentId: Int?
+    + sortOrder: Int
+    + isActive: Boolean
+    + createdAt: Timestamp
+  }
+
+  class Product {
+    + id: Int
+    + name: String
+    + slug: String
+    + description: String?
+    + price: BigDecimal
+    + comparePrice: BigDecimal?
+    + stockQuantity: Int
+    + sku: String
+    + imageUrl: String?
+    + gallery: String?
+    + categoryId: Int
+    + isActive: Boolean
+    + createdAt: Timestamp
+    + updatedAt: Timestamp
+  }
+
+  class ProductVariant {
+    + id: Int
+    + productId: Int
+    + name: String
+    + sku: String
+    + price: BigDecimal?
+    + stockQuantity: Int
+  }
+
+  class ProductAttribute {
+    + id: Int
+    + productId: Int
+    + name: String
+    + value: String
+  }
+
+  class ProductImage {
+    + id: Int
+    + productId: Int
+    + url: String
+    + altText: String?
+    + sortOrder: Int
+  }
+
+  class Cart {
+    + id: Int
+    + userId: Int
+    + createdAt: Timestamp
+    + updatedAt: Timestamp
+  }
+
+  class CartItem {
+    + id: Int
+    + cartId: Int
+    + productId: Int
+    + variantId: Int?
+    + quantity: Int
+  }
+
+  class Order {
+    + id: Int
+    + userId: Int
+    + status: OrderStatus
+    + totalAmount: BigDecimal
+    + subtotal: BigDecimal
+    + shippingCost: BigDecimal
+    + taxAmount: BigDecimal
+    + shippingAddressId: Int?
+    + notes: String?
+    + createdAt: Timestamp
+    + updatedAt: Timestamp
+  }
+
+  class OrderItem {
+    + id: Int
+    + orderId: Int
+    + productId: Int
+    + variantId: Int?
+    + quantity: Int
+    + unitPrice: BigDecimal
+  }
+
+  class Payment {
+    + id: Int
+    + orderId: Int
+    + method: String
+    + transactionId: String?
+    + status: String
+    + amount: BigDecimal
+    + paidAt: Timestamp?
+  }
+
+  class Shipment {
+    + id: Int
+    + orderId: Int
+    + carrier: String
+    + trackingNumber: String?
+    + status: String
+    + shippedAt: Timestamp?
+    + estimatedDeliveryAt: Timestamp?
+  }
+
+  class StockMovement {
+    + id: Int
+    + productId: Int
+    + variantId: Int?
+    + quantity: Int
+    + type: StockMovementType
+    + referenceId: Int?
+    + notes: String?
+    + createdAt: Timestamp
+  }
+
+  class Log {
+    + id: Int
+    + userId: Int?
+    + action: String
+    + entityType: String
+    + entityId: Int?
+    + details: String?
+    + ipAddress: String?
+    + userAgent: String?
+    + createdAt: Timestamp
+  }
+
+  class Setting {
+    + id: Int
+    + key: String
+    + value: String
+    + description: String?
+  }
+
+  class ThemeConfig {
+    + siteTitle: String
+    + primaryColor: String
+    + secondaryColor: String
+    + fontFamily: String
+    + logoUrl: String?
+    + tagline: String?
+    + layout: String?
+    + borderRadius: Int?
+    + isDarkMode: Boolean?
+  }
+
+  class Media {
+    + id: Int
+    + fileName: String
+    + filePath: String
+    + fileSize: Long
+    + mimeType: String
+    + uploadedById: Int
+    + altText: String?
+    + createdAt: Timestamp
+  }
+
+  class Page {
+    + id: Int
+    + title: String
+    + slug: String
+    + content: String
+    + isPublished: Boolean
+    + createdAt: Timestamp
+    + updatedAt: Timestamp
+  }
+
+  class Notification {
+    + id: Int
+    + userId: Int
+    + type: String
+    + message: String
+    + isRead: Boolean
+    + link: String?
+    + createdAt: Timestamp
+  }
+
+  ' --- Model relationships ---
+  User "1" -- "many" Address
+  User "1" -- "many" Post : authors
+  Post "1" -- "many" Comment
+  Comment "many" -- "1" Comment : parentId
+  Post "many" -- "many" PostCategory : < via PostCategoryMap
+  Post "many" -- "many" Tag : < via PostTag
+  Category "1" -- "many" Category : parentId
+  Category "1" -- "many" Product
+  Product "1" -- "many" ProductVariant
+  Product "1" -- "many" ProductAttribute
+  Product "1" -- "many" ProductImage
+  User "1" -- "1" Cart
+  Cart "1" -- "many" CartItem
+  Product "1" -- "many" CartItem
+  Product "1" -- "many" StockMovement
+  User "1" -- "many" Order
+  Order "1" -- "many" OrderItem
+  Product "1" -- "many" OrderItem
+  Order "1" -- "1" Payment
+  Order "1" -- "many" Shipment
+  User "1" -- "many" Log
+  User "1" -- "many" Notification
+  User "1" -- "many" Media
+  User "many" -- "many" Permission : < via RolePermission
+
+  ' --- Enum links ---
+  User ..> UserRoles
+  Order ..> OrderStatus
+  StockMovement ..> StockMovementType
+}
+
+' ===========================================
+' PACKAGE: REPOSITORY
+' ===========================================
+package "Repository\n(interfaces + impls)" as REPO #EFF6FF {
+  interface UserRepository {
+    + suspend fun findById(id: Int): User?
+    + suspend fun findByEmail(email: String): User?
+    + suspend fun create(user: User): Int
+    + suspend fun update(user: User)
+    + suspend fun delete(id: Int)
+    + suspend fun findAll(): List<User>
+  }
+
+  interface PostRepository {
+    + suspend fun findById(id: Int): Post?
+    + suspend fun findBySlug(slug: String): Post?
+    + suspend fun create(post: Post): Int
+    + suspend fun update(post: Post)
+    + suspend fun delete(id: Int)
+    + suspend fun findAllPublished(): List<Post>
+  }
+
+  interface ProductRepository {
+    + suspend fun findById(id: Int): Product?
+    + suspend fun findBySlug(slug: String): Product?
+    + suspend fun create(product: Product): Int
+    + suspend fun update(product: Product)
+    + suspend fun delete(id: Int)
+    + suspend fun findByCategory(categoryId: Int): List<Product>
+  }
+
+  interface CartRepository {
+    + suspend fun findByUserId(userId: Int): Cart?
+    + suspend fun create(cart: Cart): Int
+    + suspend fun addItem(item: CartItem): Int
+    + suspend fun removeItem(itemId: Int)
+    + suspend fun clearCart(cartId: Int)
+    + suspend fun getItems(cartId: Int): List<CartItem>
+  }
+
+  interface OrderRepository {
+    + suspend fun findById(id: Int): Order?
+    + suspend fun create(order: Order): Int
+    + suspend fun updateStatus(id: Int, status: OrderStatus)
+    + suspend fun findByUser(userId: Int): List<Order>
+    + suspend fun addItem(item: OrderItem): Int
+  }
+
+  interface LogRepository {
+    + suspend fun create(log: Log): Int
+    + suspend fun findAll(page: Int, size: Int): List<Log>
+    + suspend fun count(): Long
+  }
+
+  interface SettingRepository {
+    + suspend fun findByKey(key: String): Setting?
+    + suspend fun upsert(setting: Setting)
+    + suspend fun findAll(): List<Setting>
+  }
+
+  interface PageRepository {
+    + suspend fun findBySlug(slug: String): Page?
+    + suspend fun create(page: Page): Int
+    + suspend fun update(page: Page)
+    + suspend fun findAll(): List<Page>
+  }
+
+  interface MediaRepository {
+    + suspend fun findById(id: Int): Media?
+    + suspend fun create(media: Media): Int
+    + suspend fun delete(id: Int)
+  }
+
+  interface StockRepository {
+    + suspend fun create(movement: StockMovement): Int
+    + suspend fun findByProduct(productId: Int): List<StockMovement>
+    + suspend fun getCurrentStock(productId: Int): Int
+  }
+
+  class UserRepositoryImpl {
+    + - db: Connection
+  }
+  class PostRepositoryImpl {
+    + - db: Connection
+  }
+  class ProductRepositoryImpl {
+    + - db: Connection
+  }
+  class CartRepositoryImpl {
+    + - db: Connection
+  }
+  class OrderRepositoryImpl {
+    + - db: Connection
+  }
+  class LogRepositoryImpl {
+    + - db: Connection
+  }
+  class SettingRepositoryImpl {
+    + - db: Connection
+  }
+  class PageRepositoryImpl {
+    + - db: Connection
+  }
+  class MediaRepositoryImpl {
+    + - db: Connection
+  }
+  class StockRepositoryImpl {
+    + - db: Connection
+  }
+
+  UserRepositoryImpl ..|> UserRepository : implements
+  PostRepositoryImpl ..|> PostRepository
+  ProductRepositoryImpl ..|> ProductRepository
+  CartRepositoryImpl ..|> CartRepository
+  OrderRepositoryImpl ..|> OrderRepository
+  LogRepositoryImpl ..|> LogRepository
+  SettingRepositoryImpl ..|> SettingRepository
+  PageRepositoryImpl ..|> PageRepository
+  MediaRepositoryImpl ..|> MediaRepository
+  StockRepositoryImpl ..|> StockRepository
+}
+
+' ===========================================
+' PACKAGE: SERVICE
+' ===========================================
+package "Service\n(business logic)" as SERVICE #FFF7ED {
+  class AuthService {
+    + - userRepo: UserRepository
+    + suspend fun register(email, password): User
+    + suspend fun login(email, password): String?
+    + suspend fun validateToken(token: String): User?
+    + suspend fun hasPermission(userId: Int, perm: String): Boolean
+  }
+
+  class PostService {
+    + - postRepo: PostRepository
+    + suspend fun createPost(post: Post): Int
+    + suspend fun publishPost(id: Int)
+    + suspend fun getPublishedPosts(): List<Post>
+  }
+
+  class ProductService {
+    + - productRepo: ProductRepository
+    + - stockRepo: StockRepository
+    + suspend fun createProduct(product: Product): Int
+    + suspend fun updateStock(productId: Int, qty: Int, type: StockMovementType)
+    + suspend fun getProductsByCategory(catId: Int): List<Product>
+  }
+
+  class CartService {
+    + - cartRepo: CartRepository
+    + suspend fun getOrCreateCart(userId: Int): Cart
+    + suspend fun addToCart(userId: Int, productId: Int, qty: Int)
+    + suspend fun removeFromCart(userId: Int, itemId: Int)
+  }
+
+  class OrderService {
+    + - orderRepo: OrderRepository
+    + - cartRepo: CartRepository
+    + - stockRepo: StockRepository
+    + suspend fun checkout(userId: Int): Order
+    + suspend fun getOrderHistory(userId: Int): List<Order>
+    + suspend fun updateOrderStatus(orderId: Int, status: OrderStatus)
+  }
+
+  class AdminService {
+    + - logRepo: LogRepository
+    + - settingRepo: SettingRepository
+    + suspend fun getLogs(page: Int, size: Int): List<Log>
+    + suspend fun updateSetting(key: String, value: String)
+    + suspend fun getThemeConfig(): ThemeConfig
+    + suspend fun applyTheme(config: ThemeConfig)
+  }
+
+  class MediaService {
+    + - mediaRepo: MediaRepository
+    + suspend fun upload(file: ByteArray, mime: String): Media
+    + suspend fun delete(id: Int)
+  }
+
+  class PageService {
+    + - pageRepo: PageRepository
+    + suspend fun getPage(slug: String): Page?
+    + suspend fun createPage(page: Page): Int
+  }
+}
+
+' ===========================================
+' PACKAGE: CONTROLLER
+' ===========================================
+package "Controller\n(route handlers)" as CTRL #FEF2F2 {
+  class AuthController {
+    + POST /auth/register
+    + POST /auth/login
+    + POST /auth/logout
+    + GET /auth/me
+  }
+
+  class PostController {
+    + GET /posts
+    + GET /posts/{slug}
+    + POST /posts
+    + PUT /posts/{id}
+    + DELETE /posts/{id}
+  }
+
+  class ProductController {
+    + GET /products
+    + GET /products/{slug}
+    + GET /products/category/{catId}
+    + POST /products
+    + PUT /products/{id}
+    + DELETE /products/{id}
+  }
+
+  class CartController {
+    + GET /cart
+    + POST /cart/items
+    + PUT /cart/items/{id}
+    + DELETE /cart/items/{id}
+  }
+
+  class OrderController {
+    + POST /orders/checkout
+    + GET /orders
+    + GET /orders/{id}
+    + PUT /orders/{id}/status
+  }
+
+  class PageController {
+    + GET /{slug}
+  }
+
+  class MediaController {
+    + POST /media/upload
+    + DELETE /media/{id}
+    + GET /media/{id}
+  }
+
+  class AdminController {
+    + GET /admin/logs
+    + GET /admin/settings
+    + PUT /admin/settings/{key}
+    + PUT /admin/theme
+    + GET /api/theme-config
+    + GET /admin/dashboard
+  }
+}
+
+' ===========================================
+' PACKAGE: PLUGIN
+' ===========================================
+package "Plugin / Config" as PLUGIN #F8FAFC {
+  class CORSConfig {
+    + allowMethod()
+    + allowHeader()
+    + anyHost()
+  }
+
+  class CompressionConfig {
+    + default()
+  }
+
+  class DefaultHeadersConfig {
+    + header("X-Engine", "Ktor")
+  }
+
+  class CallIdConfig {
+    + header(XRequestId)
+    + verify { }
+  }
+
+  class ContentNegotiationConfig {
+    + json()
+  }
+
+  class JWTAuthConfig {
+    + realm, verifier
+    + validate { }
+  }
+
+  class SessionsConfig {
+    + cookie<MySession>("MY_SESSION")
+  }
+}
+
+' ===========================================
+' CROSS-PACKAGE RELATIONSHIPS
+' ===========================================
+
+' Controller → Service
+AuthController --> AuthService
+PostController --> PostService
+ProductController --> ProductService
+CartController --> CartService
+OrderController --> OrderService
+AdminController --> AdminService
+MediaController --> MediaService
+PageController --> PageService
+
+' Service → Repository
+AuthService --> UserRepository
+AuthService --> RolePermission
+PostService --> PostRepository
+ProductService --> ProductRepository
+ProductService --> StockRepository
+CartService --> CartRepository
+OrderService --> OrderRepository
+OrderService --> CartRepository
+OrderService --> StockRepository
+AdminService --> LogRepository
+AdminService --> SettingRepository
+AdminService --> ThemeConfig
+MediaService --> MediaRepository
+PageService --> PageRepository
+
+' Repository → Model
+UserRepository --> User
+UserRepository --> RolePermission
+PostRepository --> Post
+ProductRepository --> Product
+CartRepository --> Cart
+CartRepository --> CartItem
+OrderRepository --> Order
+OrderRepository --> OrderItem
+LogRepository --> Log
+SettingRepository --> Setting
+PageRepository --> Page
+MediaRepository --> Media
+StockRepository --> StockMovement
+
+@enduml

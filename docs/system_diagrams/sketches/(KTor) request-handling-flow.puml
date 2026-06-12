@@ -1,0 +1,131 @@
+@startuml
+!theme plain
+title Openpress — KTor Request Lifecycle (Full Flow)
+
+skinparam backgroundColor #f8fafc
+skinparam component {
+  BackgroundColor #ffffff
+  BorderColor #3b82f6
+  FontColor #1e293b
+  FontSize 12
+}
+
+' == LEGEND ==
+rectangle "Legend" as legend #f8fafc {
+  rectangle "Plugin Pipeline" as l1 #eff6ff
+  rectangle "Route Dispatcher" as l2 #f0fdf4
+  rectangle "Handler / Controller" as l3 #fefce8
+  rectangle "Database" as l4 #faf5ff
+  rectangle "Response" as l5 #fef2f2
+}
+legend -[hidden]-
+
+' == 1. CLIENT ==
+rectangle "🌐 Client\nBrowser / Mobile / Postman" as client #ffffff
+
+' == 2. NETTY ENGINE ==
+rectangle "🖧 Netty Engine\nio.ktor.server.netty\nPort 8080" as netty #f1f5f9
+
+' == 3. PLUGIN PIPELINE ==
+package "🔌 Plugin Pipeline\napplication.yaml module order" as plugins #ffffff {
+  rectangle "1. CORS\nOptions, Put, Delete, Patch" as cors #eff6ff
+  rectangle "2. Compression\nDecompress request body" as comp #eff6ff
+  rectangle "3. DefaultHeaders\nX-Engine: Ktor" as headers #eff6ff
+  rectangle "4. CallId\nX-Request-Id tracking" as callid #eff6ff
+  rectangle "5. ContentNegotiation\nDeserialize JSON → @Serializable" as contentneg #eff6ff
+  note right of contentneg : call.receive<City>()
+  rectangle "JWT Auth + Sessions\n(checked after C.N.)" as authsess #eff6ff
+}
+
+cors -down-> comp
+comp -down-> headers
+headers -down-> callid
+callid -down-> contentneg
+contentneg -down-> authsess
+
+' == 4. ROUTE DISPATCHER ==
+package "📍 Route Dispatcher\nrouting { }" as router #f0fdf4 {
+  rectangle "GET  /  → Hello World!" as r1 #ffffff
+  rectangle "POST /cities → JSON body → City" as r2 #ffffff
+}
+
+' == 5. HANDLER / CONTROLLER ==
+package "⚙️ Handler / Controller\nPostgres.kt — City CRUD" as handler #fefce8 {
+  rectangle "1. call.receive<City>()" as h1 #ffffff
+  rectangle "2. cityService.create(city)" as h2 #ffffff
+  rectangle "3. call.respond(Created, id)" as h3 #ffffff
+}
+
+' == 6. SERVICE LAYER ==
+package "🗄️ Service (DAO)\nCityService.kt" as service #faf5ff {
+  rectangle "suspend fun create()" as s1 #ffffff
+}
+
+' == 7. DATABASE ==
+package "💾 Database" as db #faf5ff {
+  rectangle "H2 (embedded) ← default" as h2 #ffffff
+  rectangle "PostgreSQL ← production" as pg #ffffff
+  note right of h2 : INSERT INTO cities VALUES (...)
+}
+
+' == 8. RESPONSE ==
+rectangle "📤 Response\ncall.respond()" as response #fef2f2 {
+  rectangle "ContentNegotiation serializes" as res1 #ffffff
+  rectangle "DefaultHeaders adds X-Engine" as res2 #ffffff
+}
+
+' == FLOW CONNECTIONS ==
+client -right-> netty : "HTTP Request\nPOST /cities"
+netty -right-> plugins : "Plugins\n(in order)"
+
+plugins -right-> router : "Route\nMatch"
+router -down-> handler : "Match → Execute"
+handler -down-> service : "cityService."
+service -down-> db
+
+db -right-> response : "Response"
+response -up-> client : "HTTP 201 Created\nJSON: { \"id\": 1 }"
+
+' == Module load order panel ==
+rectangle "📋 Module Load Order (application.yaml)" as modules #ffffff {
+  rectangle " 1. HttpKt.configureHttp        → CORS + Compression + DefaultHeaders" as m1 #f1f5f9
+  rectangle " 2. MonitoringKt.configureMonitoring  → CallId" as m2 #f1f5f9
+  rectangle " 3. SerializationKt.configureSerialization → ContentNegotiation (JSON)" as m3 #f1f5f9
+  rectangle " 4. SecurityKt.configureSecurity → JWT Auth + Cookie Sessions" as m4 #f1f5f9
+  rectangle " 5. PostgresKt.configurePostgres  → DB Connection + City CRUD Routes" as m5 #f1f5f9
+  rectangle " 6. RoutingKt.configureRouting   → General Routes (/, /static, /json, /session)" as m6 #f1f5f9
+}
+
+' == Key Dependencies panel ==
+rectangle "📦 Key Dependencies" as deps #ffffff {
+  list "deps" {
+    - "ktor-server-netty (engine)"
+    - "ktor-server-core (routing)"
+    - "ktor-server-auth-jwt"
+    - "ktor-server-content-negotiation"
+    - "ktor-serialization-kotlinx-json"
+    - "ktor-server-cors"
+    - "postgresql (JDBC driver)"
+    - "h2database (embedded)"
+    - "logback-classic (logging)"
+    - "ktor-simple-cache"
+  }
+}
+
+' == Source File Map panel ==
+rectangle "📁 Source File Map\nsrc/main/kotlin/" as files #ffffff {
+  list "files" {
+    - "main.kt          ← Entry: EngineMain.main(args)"
+    - "Http.kt           ← CORS + Compression + DefaultHeaders"
+    - "Monitoring.kt     ← CallId"
+    - "Serialization.kt  ← ContentNegotiation"
+    - "Security.kt       ← JWT Auth + Sessions"
+    - "Postgres.kt       ← DB connection + City CRUD routes"
+    - "Routing.kt        ← General routes"
+    - "CitySchema.kt     ← City model + CityService (DAO)"
+    - "MySession.kt      ← Session data class"
+    - "models/User.kt    ← User model + UserRoles enum"
+  }
+}
+
+@enduml

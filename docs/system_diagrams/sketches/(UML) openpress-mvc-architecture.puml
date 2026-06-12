@@ -1,0 +1,193 @@
+@startuml
+!theme plain
+title Openpress — UML Architecture: MVC Request / Response Flow
+
+skinparam backgroundColor #f1f5f9
+skinparam component {
+  BackgroundColor #ffffff
+  BorderColor #3b82f6
+  FontColor #1e293b
+  FontSize 12
+}
+
+' == 1. DEPLOYMENT VIEW ==
+package "«system» Openpress Web Application" as system #ffffff {
+  rectangle "User\n(browses / clicks)" as user
+  rectangle "«node» Browser\nChrome / Firefox / curl / Postman\nHTML rendering · JS (fetch / XHR)" as browser #f8fafc
+  rectangle "«node» KTor Application Server\nNetty engine on port 8080 · JVM 21\nPlugins: CORS · Compression · DefaultHeaders · CallId · ContentNeg · JWT · Sessions\nkotlinx.serialization · H2 embedded · PostgreSQL driver" as server #f8fafc
+  rectangle "«node» Database\nH2 (embedded) ← default\nPostgreSQL ← production" as database #faf5ff
+}
+
+user -right-> browser : uses
+browser -right-> server : "«HTTP» POST /cities"
+server -right-> database : "JDBC / SQL"
+
+note right of browser : "JSON body\n{ name,\npopulation }" as bodynote
+
+' == 2. MVC COMPONENT VIEW ==
+package "«system» KTor Server Internals — Model-View-Controller Architecture" as mvc #ffffff {
+
+  ' Layer labels
+  rectangle "«layer»" as lay1
+  rectangle "«layer»" as lay2
+  rectangle "«layer»" as lay3
+  rectangle "«layer»" as lay4
+  rectangle "«layer»" as lay5
+
+  ' === ROUTER ===
+  package "«component» Router\nRouting.kt + Postgres.kt" as router #f0fdf4 {
+    rectangle "GET    /             → Hello World!" as r1 #ffffff
+    rectangle "GET    /cities/{id}  → City" as r2 #ffffff
+    rectangle "POST   /cities       → Create City" as r3 #ffffff
+    rectangle "PUT    /cities/{id}  → Update City" as r4 #ffffff
+    rectangle "DELETE /cities/{id}  → Delete City" as r5 #ffffff
+  }
+
+  ' === CONTROLLER ===
+  package "«component» Controller\nRoute handlers" as controller #fefce8 {
+    rectangle "post(\"/cities\") {" as c1 #ffffff
+    rectangle "  val city = call.receive<City>()" as c2 #ffffff
+    rectangle "  val id = cityService.create(city)" as c3 #ffffff
+    rectangle "  call.respond(Created, id)" as c4 #ffffff
+    rectangle "}" as c5 #ffffff
+  }
+
+  ' === SERVICE ===
+  package "«component» Service\nCityService (DAO)" as service #fff7ed {
+    rectangle "suspend fun create(city: City)" as s1 #ffffff
+    rectangle "suspend fun read(id: Int)" as s2 #ffffff
+    rectangle "suspend fun update(id, city)" as s3 #ffffff
+    rectangle "suspend fun delete(id)" as s4 #ffffff
+    rectangle "withContext(Dispatchers.IO)" as s5 #ffffff
+  }
+
+  ' === MODEL ===
+  package "«component» Model\nData classes (entities)" as model #faf5ff {
+    rectangle "@Serializable" as m1 #ffffff
+    rectangle "data class City(" as m2 #ffffff
+    rectangle "  val name: String," as m3 #ffffff
+    rectangle "  val population: Int" as m4 #ffffff
+    rectangle ")" as m5 #ffffff
+  }
+
+  ' === VIEW ===
+  package "«component» View\nJSON serialization" as view #f0f9ff {
+    rectangle "ContentNegotiation Plugin" as v1 #ffffff
+    rectangle "kotlinx.serialization.json" as v2 #ffffff
+    rectangle "Model → JSON serialization" as v3 #ffffff
+    rectangle "call.respond() encodes" as v4 #ffffff
+  }
+
+  ' === DATABASE ===
+  package "«database» Database\nH2 embedded / PostgreSQL" as db2 #faf5ff {
+    rectangle "CREATE TABLE CITIES (" as d1 #ffffff
+    rectangle "  ID SERIAL PRIMARY KEY," as d2 #ffffff
+    rectangle "  NAME VARCHAR(255)," as d3 #ffffff
+    rectangle "  POPULATION INT" as d4 #ffffff
+    rectangle ")" as d5 #ffffff
+  }
+
+  ' Interconnections
+  router -down-> controller : dispatches to
+  controller -down-> service : calls
+  service -down-> model : uses
+  model -down-> view : serializes
+  service -right-> db2 : "JDBC / SQL (via withContext(IO))\nPreparedStatement\nResultSet"
+
+  ' MVC flow explanation
+  note "How routing identifies a module and dispatches to the appropriate controller:\n1. URL pattern matches in Router (e.g. POST /cities → matches post(\"/cities\"))\n2. Router invokes the matching handler function (Controller)\n3. Controller deserializes JSON body via ContentNegotiation\n4. Controller calls Service\n5. Service returns Model" as flownote
+}
+
+' == 3. REQUEST / RESPONSE FLOW ==
+package "Example: POST /cities — Create a new City (full lifecycle)" as flow #ffffff {
+
+  ' Steps
+  rectangle "① User submits form / sends\nJSON: { \"name\": \"São Paulo\", \"population\": 12300000 }" as step1 #f1f5f9
+  rectangle "② Netty Engine\nReceives raw HTTP" as step2 #f1f5f9
+  rectangle "③ Plugin Pipeline\nCORS, Compression,\nDefaultHeaders, CallId" as step3 #eff6ff
+  rectangle "④ ContentNegotiation\nDeserializes JSON body\ncall.receive<City>()" as step4 #e0f2fe
+  rectangle "⑤ Auth + Sessions\nJWT verify + Session" as step5 #fef2f2
+  rectangle "⑥ Router Match\npost(\"/cities\") ✓" as step6 #f0fdf4
+  rectangle "⑦ Controller\nHandler executes\ncityService.create()" as step7 #fefce8
+  rectangle "⑧ Service → DB\nINSERT INTO cities" as step8 #faf5ff
+
+  step1 -right-> step2 : HTTP
+  step2 -right-> step3
+  step3 -right-> step4
+  step4 -right-> step5
+  step5 -right-> step6
+  step6 -right-> step7
+  step7 -down-> step8 : suspend create()
+
+  ' Response path
+  rectangle "HTTP Response\n201 Created\n{ \"id\": 1 }" as resp #fef2f2
+  step8 -right-> resp
+  resp -up-> step1 : "← Response flows back through:\nJWT → ContentNeg → Headers → CORS"
+
+  ' Error paths
+  rectangle "⨯ 401 Unauthorized — JWT missing or invalid → authentication plugin rejects" as err1 #fef2f2
+  rectangle "⨯ 404 Not Found — Route matches but resource missing → call.respond(NotFound)" as err2 #fef2f2
+}
+
+' == 4. ROUTE TABLE ==
+rectangle "Complete Route Table — URL → Controller → Service Mapping" as routetable #ffffff {
+  rectangle "HTTP Method + Path" as th1 #0f172a
+  rectangle "Controller Handler" as th2 #0f172a
+  rectangle "Service → Model" as th3 #0f172a
+  rectangle "Response (View)" as th4 #0f172a
+  rectangle "Source File" as th5 #0f172a
+
+  rectangle "GET  /" as row1rp #f0fdf4
+  rectangle "call.respondText(\"Hello!\")" as row1ch #fefce8
+  rectangle "— (no model)" as row1sm #faf5ff
+  rectangle "Text(\"Hello, World!\")" as row1rv #f0f9ff
+  rectangle "Routing.kt" as row1sf #f8fafc
+
+  rectangle "POST /cities" as row2rp #f0fdf4
+  rectangle "call.receive(); create()" as row2ch #fefce8
+  rectangle "CityService.create(City)" as row2sm #faf5ff
+  rectangle "201 + JSON { \"id\": 1 }" as row2rv #f0f9ff
+  rectangle "Postgres.kt" as row2sf #f8fafc
+
+  rectangle "GET /cities/{id}" as row3rp #f0fdf4
+  rectangle "params[\"id\"]; read()" as row3ch #fefce8
+  rectangle "CityService.read(id)" as row3sm #faf5ff
+  rectangle "200 + JSON City" as row3rv #f0f9ff
+  rectangle "Postgres.kt" as row3sf #f8fafc
+
+  rectangle "PUT /cities/{id}" as row4rp #f0fdf4
+  rectangle "receive(); update()" as row4ch #fefce8
+  rectangle "CityService.update(id)" as row4sm #faf5ff
+  rectangle "200 OK" as row4rv #f0f9ff
+  rectangle "Postgres.kt" as row4sf #f8fafc
+
+  rectangle "DELETE /cities/{id}" as row5rp #f0fdf4
+  rectangle "params[\"id\"]; delete()" as row5ch #fefce8
+  rectangle "CityService.delete(id)" as row5sm #faf5ff
+  rectangle "200 OK" as row5rv #f0f9ff
+  rectangle "Postgres.kt" as row5sf #f8fafc
+
+  rectangle "GET /session/increment" as row6rp #f0fdf4
+  rectangle "sessions.get(); set()" as row6ch #fefce8
+  rectangle "MySession(count)" as row6sm #faf5ff
+  rectangle "Text(\"Counter is ${c}\")" as row6rv #f0f9ff
+  rectangle "Routing.kt" as row6sf #f8fafc
+}
+
+' == Source File Map ==
+rectangle "Source File Map\nsrc/main/kotlin/" as srcmap #ffffff {
+  list "sources" {
+    - "main.kt              ← Entry point"
+    - "Http.kt               ← CORS, Compression, Headers"
+    - "Monitoring.kt         ← CallId plugin"
+    - "Serialization.kt      ← ContentNegotiation (JSON)"
+    - "Security.kt           ← JWT Auth + Sessions"
+    - "Routing.kt            ← General routes"
+    - "Postgres.kt           ← DB + City CRUD routes"
+    - "CitySchema.kt         ← City model + CityService"
+    - "MySession.kt          ← Session data class"
+    - "models/User.kt        ← User model + UserRoles enum"
+  }
+}
+
+@enduml

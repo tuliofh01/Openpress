@@ -1,0 +1,51 @@
+@startuml
+title Openpress — Shopping Cart Checkout Flow
+
+actor "User" as user
+participant "CartController" as cart #FEF2F2
+participant "OrderController" as order #FEF2F2
+participant "CartService" as csvc #FFF7ED
+participant "OrderService" as osvc #FFF7ED
+participant "ProductRepository" as prepo #EFF6FF
+participant "CartRepository" as crepo #EFF6FF
+participant "OrderRepository" as orepo #EFF6FF
+database "Database" as db #FAF5FF
+
+user -> cart: POST /cart/items { productId, quantity }
+cart -> csvc: addToCart(userId, productId, qty)
+csvc -> prepo: findById(productId)
+prepo -> db: SELECT * FROM products
+db --> prepo: Product
+prepo --> csvc: Product
+csvc -> crepo: addItem(cartId, productId, qty)
+crepo -> db: INSERT INTO cart_items
+db --> crepo: CartItem
+csvc --> cart: CartItem
+cart --> user: 201 Created
+
+user -> order: POST /orders/checkout
+order -> osvc: checkout(userId)
+osvc -> csvc: getOrCreateCart(userId)
+csvc -> crepo: getItems(cartId)
+crepo -> db: SELECT * FROM cart_items
+db --> crepo: List<CartItem>
+crepo --> csvc: List<CartItem>
+osvc -> orepo: create(cartItems → Order)
+orepo -> db: INSERT INTO orders + order_items
+db --> orepo: Order
+osvc -> osvc: Calculate total
+osvc -> prepo: updateStock(productId, -quantity)
+prepo -> db: UPDATE products SET stock = stock - ?
+alt Payment success
+  osvc -> orepo: createPayment(orderId, amount)
+  orepo -> db: INSERT INTO payments
+  db --> orepo: Payment
+  osvc -> csvc: clearCart(cartId)
+  csvc -> crepo: DELETE FROM cart_items
+  osvc --> order: Order + Receipt
+  order --> user: 201 Created + { order, receipt }
+else Payment failed
+  osvc --> order: PaymentException
+  order --> user: 402 Payment Required
+end
+@enduml

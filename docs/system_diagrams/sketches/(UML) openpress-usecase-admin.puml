@@ -1,0 +1,84 @@
+@startuml
+title Openpress — Admin Use Cases (Detail)
+
+skinparam backgroundColor #F8FAFC
+skinparam defaultFontName Helvetica
+skinparam useCaseBorderColor #475569
+skinparam useCaseBackgroundColor #FFFFFF
+skinparam actorBorderColor #1E293B
+skinparam actorBackgroundColor #E2E8F0
+skinparam arrowColor #475569
+
+left to right direction
+
+actor "Administrator" as admin
+
+rectangle "User Management" {
+  usecase "Create User" as A1
+  usecase "Edit User" as A2
+  usecase "Delete User" as A3
+  usecase "Assign Roles" as A4
+  usecase "Reset Password" as A5
+}
+
+rectangle "Content Management" {
+  usecase "Create / Edit / Delete\nPosts" as B1
+  usecase "Approve / Reject\nComments" as B2
+  usecase "Manage Pages" as B3
+  usecase "Manage Categories\n& Tags" as B4
+}
+
+rectangle "Shop Management" {
+  usecase "Create / Edit / Delete\nProducts" as C1
+  usecase "Manage Variants\n& Attributes" as C2
+  usecase "Update Stock\nLevels" as C3
+  usecase "View Stock\nMovement History" as C4
+}
+
+rectangle "Order Management" {
+  usecase "View All Orders" as D1
+  usecase "Update Order\nStatus" as D2
+  usecase "Issue Refund" as D3
+  usecase "Manage Shipments" as D4
+}
+
+rectangle "System Configuration" {
+  usecase "View System\nLogs" as E1
+  usecase "Export Logs" as E2
+  usecase "Configure Site\nSettings" as E3
+  usecase "Customize Theme\n& Layout" as E4
+  usecase "Manage Media\nLibrary" as E5
+}
+
+rectangle "Monitoring" {
+  usecase "View Dashboard\nAnalytics" as F1
+  usecase "View Sales\nReports" as F2
+  usecase "View User\nActivity" as F3
+}
+
+admin --> A1
+admin --> A2
+admin --> A3
+admin --> A4
+admin --> A5
+admin --> B1
+admin --> B2
+admin --> B3
+admin --> B4
+admin --> C1
+admin --> C2
+admin --> C3
+admin --> C4
+admin --> D1
+admin --> D2
+admin --> D3
+admin --> D4
+admin --> E1
+admin --> E2
+admin --> E3
+admin --> E4
+admin --> E5
+admin --> F1
+admin --> F2
+admin --> F3
+@enduml

@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1550" height="1460" viewBox="0 0 1550 1460">
+  <defs>
+    <!-- Arrow markers -->
+    <marker id="arrow-req" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-res" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 10 0 L 0 5 L 10 10 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#16a34a"/>
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9333ea"/>
+    </marker>
+    <marker id="arrow-dash" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+
+    <!-- Shadows -->
+    <filter id="shadow" x="-5%" y="-5%" width="115%" height="115%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-opacity="0.12"/>
+    </filter>
+    <filter id="shadow-heavy" x="-8%" y="-8%" width="120%" height="120%">
+      <feDropShadow dx="3" dy="4" stdDeviation="4" flood-opacity="0.18"/>
+    </filter>
+    <filter id="glow-blue" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#3b82f6" flood-opacity="0.25"/>
+    </filter>
+
+    <!-- Gradients -->
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    <linearGradient id="nodeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8fafc"/>
+      <stop offset="100%" style="stop-color:#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="dbNodeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#faf5ff"/>
+      <stop offset="100%" style="stop-color:#e9d5ff"/>
+    </linearGradient>
+    <linearGradient id="compRouter" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0fdf4"/>
+      <stop offset="100%" style="stop-color:#bbf7d0"/>
+    </linearGradient>
+    <linearGradient id="compController" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fefce8"/>
+      <stop offset="100%" style="stop-color:#fde68a"/>
+    </linearGradient>
+    <linearGradient id="compService" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fff7ed"/>
+      <stop offset="100%" style="stop-color:#fed7aa"/>
+    </linearGradient>
+    <linearGradient id="compModel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#faf5ff"/>
+      <stop offset="100%" style="stop-color:#d8b4fe"/>
+    </linearGradient>
+    <linearGradient id="compRepo" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0f9ff"/>
+      <stop offset="100%" style="stop-color:#bae6fd"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ========================== BACKGROUND ========================== -->
+  <rect width="1550" height="1460" fill="#f1f5f9" rx="8"/>
+
+  <!-- ========================== TITLE BAR ========================== -->
+  <rect x="0" y="0" width="1550" height="60" fill="url(#headerGrad)" rx="8"/>
+  <rect x="0" y="30" width="1550" height="30" fill="url(#headerGrad)"/>
+  <text x="775" y="38" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="22" font-weight="bold">Openpress — UML Architecture: MVC Request / Response Flow</text>
+
+  <!-- ========================== LEGEND ========================== -->
+  <rect x="20" y="75" width="1510" height="50" fill="#ffffff" stroke="#cbd5e1" rx="8" filter="url(#shadow)"/>
+  <text x="40" y="102" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#475569">Legend:</text>
+
+  <!-- UML Node -->
+  <rect x="120" y="86" width="18" height="18" fill="url(#nodeGrad)" stroke="#64748b" rx="3"/>
+  <text x="144" y="100" font-family="Arial, sans-serif" font-size="11" fill="#475569">UML Node (Deployment)</text>
+
+  <!-- UML Component -->
+  <rect x="300" y="86" width="18" height="18" fill="url(#compRouter)" stroke="#16a34a" rx="3"/>
+  <text x="324" y="100" font-family="Arial, sans-serif" font-size="11" fill="#475569">UML «component» (MVC Layer)</text>
+
+  <!-- Request arrow -->
+  <line x1="510" y1="95" x2="540" y2="95" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-req)"/>
+  <text x="548" y="100" font-family="Arial, sans-serif" font-size="11" fill="#2563eb">Request flow</text>
+
+  <!-- Response arrow -->
+  <line x1="680" y1="95" x2="710" y2="95" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arrow-res)"/>
+  <text x="718" y="100" font-family="Arial, sans-serif" font-size="11" fill="#dc2626">Response flow</text>
+
+  <!-- Dependency arrow -->
+  <line x1="860" y1="95" x2="890" y2="95" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow-dash)"/>
+  <text x="898" y="100" font-family="Arial, sans-serif" font-size="11" fill="#64748b">UML dependency</text>
+
+  <!-- Boundary -->
+  <line x1="1060" y1="88" x2="1060" y2="112" stroke="#64748b" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="1070" y="100" font-family="Arial, sans-serif" font-size="11" fill="#64748b">System boundary</text>
+
+  <!-- ======================================================================== -->
+  <!-- SECTION 1: DEPLOYMENT VIEW (UML Deployment Diagram style)                -->
+  <!-- ======================================================================== -->
+
+  <!-- Section label -->
+  <rect x="20" y="140" width="200" height="24" fill="#0f172a" rx="4"/>
+  <text x="120" y="157" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="12" font-weight="bold">1. DEPLOYMENT VIEW</text>
+
+  <!-- System boundary rectangle: Web Application -->
+  <rect x="250" y="135" width="1280" height="195" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="8,4" rx="10"/>
+  <text x="270" y="156" font-family="Arial, sans-serif" font-size="11" fill="#64748b" font-style="italic">«system» Openpress Web Application</text>
+
+  <!-- ===== NODE: User ===== -->
+  <!-- UML Actor (stick figure) -->
+  <circle cx="130" cy="178" r="10" fill="none" stroke="#1e293b" stroke-width="2"/>
+  <line x1="130" y1="188" x2="130" y2="215" stroke="#1e293b" stroke-width="2"/>
+  <line x1="110" y1="200" x2="150" y2="200" stroke="#1e293b" stroke-width="2"/>
+  <line x1="130" y1="215" x2="115" y2="235" stroke="#1e293b" stroke-width="2"/>
+  <line x1="130" y1="215" x2="145" y2="235" stroke="#1e293b" stroke-width="2"/>
+  <text x="130" y="252" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1e293b">User</text>
+  <text x="130" y="266" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#64748b">(browses / clicks)</text>
+
+  <!-- HTTP arrow: User → Browser -->
+  <line x1="160" y1="220" x2="265" y2="220" stroke="#1e293b" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="200" y="215" font-family="Arial, sans-serif" font-size="9" fill="#64748b">uses</text>
+
+  <!-- ===== NODE: Browser ===== -->
+  <rect x="270" y="175" width="200" height="65" fill="url(#nodeGrad)" stroke="#475569" stroke-width="2" rx="8" filter="url(#shadow-heavy)"/>
+  <text x="370" y="196" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#1e293b">«node» Browser</text>
+  <text x="370" y="215" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#475569">Chrome / Firefox / curl / Postman</text>
+  <text x="370" y="232" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#64748b">HTML rendering · JS (fetch / XHR)</text>
+
+  <!-- HTTP arrow: Browser → Netty -->
+  <line x1="470" y1="207" x2="535" y2="207" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-req)"/>
+  <text x="498" y="196" font-family="Arial, sans-serif" font-size="9" fill="#2563eb">«HTTP»</text>
+  <text x="498" y="225" font-family="Arial, sans-serif" font-size="9" fill="#2563eb">POST /cities</text>
+
+  <!-- Attach note near HTTP -->
+  <rect x="492" y="162" width="60" height="40" fill="#fef9c3" stroke="#eab308" rx="4"/>
+  <text x="522" y="177" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#854d0e">JSON body</text>
+  <text x="522" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#854d0e">{ name,</text>
+  <text x="522" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#854d0e">population }</text>
+  <line x1="492" y1="200" x2="510" y2="207" stroke="#eab308" stroke-width="1"/>
+
+  <!-- ===== NODE: KTor Server ===== -->
+  <rect x="540" y="160" width="500" height="90" fill="url(#nodeGrad)" stroke="#475569" stroke-width="2" rx="8" filter="url(#shadow-heavy)"/>
+  <text x="790" y="181" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#1e293b">«node» KTor Application Server</text>
+  <text x="790" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#475569">Netty engine on port 8080 · JVM 21</text>
+  <text x="790" y="218" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#64748b">Plugins: CORS · Compression · DefaultHeaders · CallId · ContentNeg · JWT · Sessions</text>
+  <text x="790" y="236" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#64748b">kotlinx.serialization · H2 embedded · PostgreSQL driver</text>
+
+  <!-- Arrow: KTor → Database -->
+  <line x1="1040" y1="205" x2="1105" y2="205" stroke="#9333ea" stroke-width="2.5" marker-end="url(#arrow-purple)"/>
+  <text x="1068" y="196" font-family="Arial, sans-serif" font-size="9" fill="#9333ea">JDBC</text>
+  <text x="1068" y="225" font-family="Arial, sans-serif" font-size="9" fill="#9333ea">SQL</text>
+
+  <!-- ===== NODE: Database ===== -->
+  <rect x="1110" y="170" width="220" height="75" fill="url(#dbNodeGrad)" stroke="#7c3aed" stroke-width="2" rx="8" filter="url(#shadow-heavy)"/>
+  <text x="1220" y="192" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#5b21b6">«node» Database</text>
+  <text x="1220" y="212" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#7c3aed">H2 (embedded) ← default</text>
+  <text x="1220" y="230" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#7c3aed">PostgreSQL ← production</text>
+
+  <!-- DB icon -->
+  <ellipse cx="1130" cy="195" rx="14" ry="10" fill="#7c3aed" opacity="0.15"/>
+  <ellipse cx="1130" cy="195" rx="14" ry="10" fill="none" stroke="#7c3aed" stroke-width="1.5"/>
+  <line x1="1116" y1="198" x2="1116" y2="212" stroke="#7c3aed" stroke-width="1.5"/>
+  <line x1="1144" y1="198" x2="1144" y2="212" stroke="#7c3aed" stroke-width="1.5"/>
+  <ellipse cx="1130" cy="212" rx="14" ry="10" fill="none" stroke="#7c3aed" stroke-width="1.5"/>
+
+
+  <!-- ======================================================================== -->
+  <!-- SECTION 2: MVC COMPONENT VIEW (UML Component Diagram style)             -->
+  <!-- ======================================================================== -->
+
+  <rect x="20" y="350" width="280" height="24" fill="#0f172a" rx="4"/>
+  <text x="160" y="367" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="12" font-weight="bold">2. MVC COMPONENT VIEW</text>
+
+  <!-- System boundary for MVC internals -->
+  <rect x="20" y="385" width="1510" height="420" fill="#ffffff" stroke="#cbd5e1" rx="12" filter="url(#shadow)"/>
+  <text x="40" y="408" font-family="Arial, sans-serif" font-size="11" fill="#64748b" font-style="italic">«system» KTor Server Internals — Model-View-Controller Architecture</text>
+
+  <!-- ===== STEREOTYPE LABELS at top ===== -->
+  <text x="45" y="435" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748b">«layer»</text>
+  <text x="255" y="435" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748b">«layer»</text>
+  <text x="475" y="435" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748b">«layer»</text>
+  <text x="692" y="435" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748b">«layer»</text>
+  <text x="900" y="435" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748b">«layer»</text>
+  <text x="1100" y="435" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748b">«layer»</text>
+
+  <!-- ================================================================== -->
+  <!-- 2a. ROUTER component                                               -->
+  <!-- ================================================================== -->
+  <rect x="35" y="445" width="230" height="160" fill="url(#compRouter)" stroke="#16a34a" stroke-width="2" rx="8" filter="url(#shadow)"/>
+  <!-- Stereotype label -->
+  <rect x="50" y="455" width="90" height="16" fill="#16a34a" rx="3"/>
+  <text x="95" y="467" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="8" font-weight="bold">«component»</text>
+  <text x="150" y="468" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#15803d">Router</text>
+
+  <text x="52" y="490" font-family="Arial, sans-serif" font-size="9" fill="#166534">Routing.kt + Postgres.kt</text>
+  <line x1="50" y1="498" x2="250" y2="498" stroke="#86efac" stroke-width="1"/>
+
+  <!-- Route entries as a mini table -->
+  <rect x="45" y="505" width="210" height="16" fill="#ffffff" stroke="#86efac" rx="2"/>
+  <text x="50" y="517" font-family="monospace" font-size="8" fill="#15803d">GET    /             → Hello World!</text>
+
+  <rect x="45" y="523" width="210" height="16" fill="#ffffff" stroke="#86efac" rx="2"/>
+  <text x="50" y="535" font-family="monospace" font-size="8" fill="#15803d">GET    /cities/{id}  → City</text>
+
+  <rect x="45" y="541" width="210" height="16" fill="#ffffff" stroke="#86efac" rx="2"/>
+  <text x="50" y="553" font-family="monospace" font-size="8" fill="#15803d">POST   /cities       → Create City</text>
+
+  <rect x="45" y="559" width="210" height="16" fill="#ffffff" stroke="#86efac" rx="2"/>
+  <text x="50" y="571" font-family="monospace" font-size="8" fill="#15803d">PUT    /cities/{id}  → Update City</text>
+
+  <rect x="45" y="577" width="210" height="16" fill="#ffffff" stroke="#86efac" rx="2"/>
+  <text x="50" y="589" font-family="monospace" font-size="8" fill="#15803d">DELETE /cities/{id}  → Delete City</text>
+
+  <!-- ================================================================== -->
+  <!-- 2b. CONTROLLER component                                           -->
+  <!-- ================================================================== -->
+  <rect x="290" y="445" width="220" height="160" fill="url(#compController)" stroke="#ca8a04" stroke-width="2" rx="8" filter="url(#shadow)"/>
+  <rect x="305" y="455" width="90" height="16" fill="#ca8a04" rx="3"/>
+  <text x="350" y="467" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="8" font-weight="bold">«component»</text>
+  <text x="405" y="468" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#854d0e">Controller</text>
+
+  <text x="307" y="490" font-family="Arial, sans-serif" font-size="9" fill="#854d0e">Route handlers</text>
+  <line x1="305" y1="498" x2="495" y2="498" stroke="#fde68a" stroke-width="1"/>
+
+  <rect x="300" y="505" width="200" height="16" fill="#ffffff" stroke="#eab308" rx="2"/>
+  <text x="305" y="517" font-family="monospace" font-size="8" fill="#854d0e">post("/cities") {</text>
+
+  <rect x="300" y="523" width="200" height="16" fill="#ffffff" stroke="#eab308" rx="2"/>
+  <text x="310" y="535" font-family="monospace" font-size="8" fill="#854d0e">val city = call.receive&lt;City&gt;()</text>
+
+  <rect x="300" y="541" width="200" height="16" fill="#ffffff" stroke="#eab308" rx="2"/>
+  <text x="310" y="553" font-family="monospace" font-size="8" fill="#854d0e">val id = cityService.create(city)</text>
+
+  <rect x="300" y="559" width="200" height="16" fill="#ffffff" stroke="#eab308" rx="2"/>
+  <text x="310" y="571" font-family="monospace" font-size="8" fill="#854d0e">call.respond(Created, id)</text>
+
+  <rect x="300" y="577" width="200" height="16" fill="#ffffff" stroke="#eab308" rx="2"/>
+  <text x="305" y="589" font-family="monospace" font-size="8" fill="#854d0e">}</text>
+
+  <!-- ================================================================== -->
+  <!-- 2c. SERVICE component                                              -->
+  <!-- ================================================================== -->
+  <rect x="535" y="445" width="210" height="160" fill="url(#compService)" stroke="#ea580c" stroke-width="2" rx="8" filter="url(#shadow)"/>
+  <rect x="550" y="455" width="90" height="16" fill="#ea580c" rx="3"/>
+  <text x="595" y="467" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="8" font-weight="bold">«component»</text>
+  <text x="650" y="468" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#9a3412">Service</text>
+
+  <text x="552" y="490" font-family="Arial, sans-serif" font-size="9" fill="#9a3412">CityService (DAO)</text>
+  <line x1="550" y1="498" x2="730" y2="498" stroke="#fed7aa" stroke-width="1"/>
+
+  <rect x="545" y="505" width="190" height="16" fill="#ffffff" stroke="#f97316" rx="2"/>
+  <text x="550" y="517" font-family="monospace" font-size="8" fill="#9a3412">suspend fun create(city: City)</text>
+
+  <rect x="545" y="523" width="190" height="16" fill="#ffffff" stroke="#f97316" rx="2"/>
+  <text x="550" y="535" font-family="monospace" font-size="8" fill="#9a3412">suspend fun read(id: Int)</text>
+
+  <rect x="545" y="541" width="190" height="16" fill="#ffffff" stroke="#f97316" rx="2"/>
+  <text x="550" y="553" font-family="monospace" font-size="8" fill="#9a3412">suspend fun update(id, city)</text>
+
+  <rect x="545" y="559" width="190" height="16" fill="#ffffff" stroke="#f97316" rx="2"/>
+  <text x="550" y="571" font-family="monospace" font-size="8" fill="#9a3412">suspend fun delete(id)</text>
+
+  <rect x="545" y="577" width="190" height="16" fill="#ffffff" stroke="#f97316" rx="2"/>
+  <text x="550" y="589" font-family="monospace" font-size="8" fill="#9a3412">withContext(Dispatchers.IO)</text>
+
+  <!-- ================================================================== -->
+  <!-- 2d. MODEL component                                                -->
+  <!-- ================================================================== -->
+  <rect x="770" y="445" width="200" height="160" fill="url(#compModel)" stroke="#9333ea" stroke-width="2" rx="8" filter="url(#shadow)"/>
+  <rect x="785" y="455" width="90" height="16" fill="#9333ea" rx="3"/>
+  <text x="830" y="467" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="8" font-weight="bold">«component»</text>
+  <text x="885" y="468" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#6b21a8">Model</text>
+
+  <text x="787" y="490" font-family="Arial, sans-serif" font-size="9" fill="#6b21a8">Data classes (entities)</text>
+  <line x1="785" y1="498" x2="955" y2="498" stroke="#d8b4fe" stroke-width="1"/>
+
+  <rect x="780" y="505" width="180" height="22" fill="#ffffff" stroke="#a855f7" rx="2"/>
+  <text x="785" y="517" font-family="monospace" font-size="8" fill="#6b21a8">@Serializable</text>
+  <text x="785" y="528" font-family="monospace" font-size="8" fill="#6b21a8">data class City(</text>
+
+  <rect x="780" y="531" width="180" height="18" fill="#ffffff" stroke="#a855f7" rx="2"/>
+  <text x="789" y="544" font-family="monospace" font-size="8" fill="#6b21a8">val name: String,</text>
+
+  <rect x="780" y="553" width="180" height="18" fill="#ffffff" stroke="#a855f7" rx="2"/>
+  <text x="789" y="566" font-family="monospace" font-size="8" fill="#6b21a8">val population: Int</text>
+
+  <rect x="780" y="575" width="180" height="18" fill="#ffffff" stroke="#a855f7" rx="2"/>
+  <text x="785" y="588" font-family="monospace" font-size="8" fill="#6b21a8">)</text>
+
+  <!-- ================================================================== -->
+  <!-- 2e. VIEW (serialization)                                           -->
+  <!-- ================================================================== -->
+  <rect x="995" y="445" width="180" height="160" fill="url(#compRepo)" stroke="#0284c7" stroke-width="2" rx="8" filter="url(#shadow)"/>
+  <rect x="1010" y="455" width="90" height="16" fill="#0284c7" rx="3"/>
+  <text x="1055" y="467" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="8" font-weight="bold">«component»</text>
+  <text x="1105" y="468" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#0369a1">View</text>
+
+  <text x="1012" y="490" font-family="Arial, sans-serif" font-size="9" fill="#0369a1">JSON serialization</text>
+  <line x1="1010" y1="498" x2="1160" y2="498" stroke="#bae6fd" stroke-width="1"/>
+
+  <rect x="1005" y="505" width="160" height="18" fill="#ffffff" stroke="#38bdf8" rx="2"/>
+  <text x="1010" y="518" font-family="Arial, sans-serif" font-size="9" fill="#0369a1">ContentNegotiation Plugin</text>
+
+  <rect x="1005" y="527" width="160" height="18" fill="#ffffff" stroke="#38bdf8" rx="2"/>
+  <text x="1010" y="540" font-family="monospace" font-size="8" fill="#0369a1">kotlinx.serialization.json</text>
+
+  <rect x="1005" y="549" width="160" height="18" fill="#ffffff" stroke="#38bdf8" rx="2"/>
+  <text x="1010" y="562" font-family="Arial, sans-serif" font-size="9" fill="#0369a1">Model → JSON serialization</text>
+
+  <rect x="1005" y="571" width="160" height="18" fill="#ffffff" stroke="#38bdf8" rx="2"/>
+  <text x="1010" y="584" font-family="Arial, sans-serif" font-size="9" fill="#0369a1">call.respond() encodes</text>
+
+  <!-- ===== INTERCONNECTING ARROWS between components ===== -->
+
+  <!-- Router sends URL match to Controller -->
+  <path d="M 265 525 L 280 525 L 280 445 L 290 445" stroke="#16a34a" stroke-width="2" fill="none" marker-end="url(#arrow-green)"/>
+  <text x="280" y="470" font-family="Arial, sans-serif" font-size="8" fill="#16a34a" transform="rotate(90, 280, 478)">dispatches to</text>
+
+  <!-- Controller calls Service -->
+  <path d="M 510 525 L 525 525 L 525 445 L 535 445" stroke="#ca8a04" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <!-- Arrow marker for brown -->
+  <polygon points="535,445 535,437 543,445 535,453" fill="#ca8a04"/>
+  <text x="528" y="470" font-family="Arial, sans-serif" font-size="8" fill="#ca8a04" transform="rotate(90, 528, 478)">calls</text>
+
+  <!-- Service uses Model -->
+  <path d="M 745 525 L 758 525 L 758 445 L 770 445" stroke="#ea580c" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <polygon points="770,445 770,437 778,445 770,453" fill="#ea580c"/>
+  <text x="758" y="470" font-family="Arial, sans-serif" font-size="8" fill="#ea580c" transform="rotate(90, 758, 478)">uses</text>
+
+  <!-- Model serialized by View -->
+  <path d="M 970 525 L 985 525 L 985 445 L 995 445" stroke="#9333ea" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <polygon points="995,445 995,437 1003,445 995,453" fill="#9333ea"/>
+  <text x="985" y="470" font-family="Arial, sans-serif" font-size="8" fill="#9333ea" transform="rotate(90, 985, 478)">serializes</text>
+
+  <!-- ===== MVC flow explanation box ===== -->
+  <rect x="35" y="620" width="1140" height="60" fill="#f8fafc" stroke="#cbd5e1" rx="6"/>
+  <text x="55" y="640" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#475569">How routing identifies a module and dispatches to the appropriate controller:</text>
+  <text x="55" y="658" font-family="Arial, sans-serif" font-size="10" fill="#64748b">1. URL pattern matches in Router (e.g. <tspan font-family="monospace" fill="#15803d">POST /cities</tspan> → matches <tspan font-family="monospace" fill="#15803d">post("/cities")</tspan>)</text>
+  <text x="55" y="673" font-family="Arial, sans-serif" font-size="10" fill="#64748b">2. Router invokes the matching handler function (Controller)  3. Controller deserializes JSON body via ContentNegotiation  4. Controller calls Service  5. Service returns Model</text>
+
+  <!-- ===== DATABASE interaction (right of MVC) ===== -->
+  <rect x="1200" y="445" width="220" height="160" fill="url(#dbNodeGrad)" stroke="#7c3aed" stroke-width="2" rx="8" filter="url(#shadow)"/>
+  <rect x="1215" y="455" width="90" height="16" fill="#7c3aed" rx="3"/>
+  <text x="1260" y="467" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="8" font-weight="bold">«database»</text>
+  <text x="1310" y="468" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#5b21b6">Database</text>
+  <text x="1217" y="490" font-family="Arial, sans-serif" font-size="9" fill="#5b21b6">H2 embedded / PostgreSQL</text>
+  <line x1="1215" y1="498" x2="1405" y2="498" stroke="#c084fc" stroke-width="1"/>
+
+  <rect x="1210" y="505" width="200" height="16" fill="#ffffff" stroke="#a855f7" rx="2"/>
+  <text x="1215" y="517" font-family="monospace" font-size="8" fill="#5b21b6">CREATE TABLE CITIES (</text>
+
+  <rect x="1210" y="523" width="200" height="16" fill="#ffffff" stroke="#a855f7" rx="2"/>
+  <text x="1215" y="535" font-family="monospace" font-size="8" fill="#5b21b6">  ID SERIAL PRIMARY KEY,</text>
+
+  <rect x="1210" y="541" width="200" height="16" fill="#ffffff" stroke="#a855f7" rx="2"/>
+  <text x="1215" y="553" font-family="monospace" font-size="8" fill="#5b21b6">  NAME VARCHAR(255),</text>
+
+  <rect x="1210" y="559" width="200" height="16" fill="#ffffff" stroke="#a855f7" rx="2"/>
+  <text x="1215" y="571" font-family="monospace" font-size="8" fill="#5b21b6">  POPULATION INT</text>
+
+  <rect x="1210" y="577" width="200" height="16" fill="#ffffff" stroke="#a855f7" rx="2"/>
+  <text x="1215" y="589" font-family="monospace" font-size="8" fill="#5b21b6">)</text>
+
+  <!-- Service → DB arrow -->
+  <path d="M 745 525 L 1195 525" stroke="#9333ea" stroke-width="2" fill="none" marker-end="url(#arrow-purple)"/>
+  <text x="930" y="515" font-family="Arial, sans-serif" font-size="9" fill="#9333ea">JDBC / SQL (via kotlinx.coroutines withContext(IO))</text>
+
+  <!-- Repository/DAO note -->
+  <text x="748" y="545" font-family="Arial, sans-serif" font-size="8" fill="#9333ea">PreparedStatement</text>
+  <text x="748" y="557" font-family="Arial, sans-serif" font-size="8" fill="#9333ea">ResultSet</text>
+
+
+  <!-- ======================================================================== -->
+  <!-- SECTION 3: SEQUENCE / FLOW VIEW (Request → Response path)               -->
+  <!-- ======================================================================== -->
+
+  <rect x="20" y="820" width="290" height="24" fill="#0f172a" rx="4"/>
+  <text x="165" y="837" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="12" font-weight="bold">3. REQUEST / RESPONSE FLOW</text>
+
+  <!-- Container -->
+  <rect x="20" y="855" width="1510" height="295" fill="#ffffff" stroke="#cbd5e1" rx="12" filter="url(#shadow)"/>
+
+  <!-- ===== Example: POST /cities — full lifecycle ===== -->
+  <text x="40" y="880" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1e293b">Example: <tspan font-family="monospace" fill="#2563eb">POST /cities</tspan> — Create a new City (full lifecycle)</text>
+
+  <!-- Step 1: User action -->
+  <rect x="40" y="895" width="240" height="50" fill="#f1f5f9" stroke="#64748b" rx="6"/>
+  <text x="160" y="915" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#1e293b">① User submits form / sends</text>
+  <text x="160" y="932" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#64748b">JSON: { "name": "São Paulo", "population": 12300000 }</text>
+
+  <line x1="280" y1="920" x2="320" y2="920" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-req)"/>
+  <text x="293" y="912" font-family="Arial, sans-serif" font-size="8" fill="#2563eb">HTTP</text>
+
+  <!-- Step 2: Netty -->
+  <rect x="330" y="895" width="130" height="50" fill="#f1f5f9" stroke="#475569" rx="6"/>
+  <text x="395" y="915" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#1e293b">② Netty Engine</text>
+  <text x="395" y="932" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#64748b">Receives raw HTTP</text>
+
+  <line x1="460" y1="920" x2="500" y2="920" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-req)"/>
+
+  <!-- Step 3: Plugins -->
+  <rect x="510" y="895" width="130" height="50" fill="#eff6ff" stroke="#3b82f6" rx="6"/>
+  <text x="575" y="912" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#1d4ed8">③ Plugin Pipeline</text>
+  <text x="575" y="927" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#3b82f6">CORS, Compression,</text>
+  <text x="575" y="939" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#3b82f6">DefaultHeaders, CallId</text>
+
+  <line x1="640" y1="920" x2="680" y2="920" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-req)"/>
+
+  <!-- Step 4: ContentNegotiation -->
+  <rect x="690" y="890" width="140" height="60" fill="#e0f2fe" stroke="#0284c7" rx="6"/>
+  <text x="760" y="908" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#0369a1">④ ContentNegotiation</text>
+  <text x="760" y="923" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#0284c7">Deserializes JSON body</text>
+  <text x="760" y="938" text-anchor="middle" font-family="monospace" font-size="8" fill="#0284c7">call.receive&lt;City&gt;()</text>
+
+  <line x1="830" y1="920" x2="870" y2="920" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-req)"/>
+
+  <!-- Step 5: JWT + Sessions -->
+  <rect x="880" y="895" width="130" height="50" fill="#fef2f2" stroke="#dc2626" rx="6"/>
+  <text x="945" y="912" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#991b1b">⑤ Auth + Sessions</text>
+  <text x="945" y="928" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#dc2626">JWT verify + Session</text>
+
+  <line x1="1010" y1="920" x2="1050" y2="920" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-req)"/>
+
+  <!-- Step 6: Router -->
+  <rect x="1060" y="895" width="130" height="50" fill="#f0fdf4" stroke="#16a34a" rx="6"/>
+  <text x="1125" y="912" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#15803d">⑥ Router Match</text>
+  <text x="1125" y="928" text-anchor="middle" font-family="monospace" font-size="8" fill="#15803d">post("/cities") ✓</text>
+
+  <line x1="1190" y1="920" x2="1230" y2="920" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-req)"/>
+
+  <!-- Step 7: Handler/Controller -->
+  <rect x="1240" y="890" width="140" height="60" fill="#fefce8" stroke="#ca8a04" rx="6"/>
+  <text x="1310" y="908" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#854d0e">⑦ Controller</text>
+  <text x="1310" y="923" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ca8a04">Handler executes</text>
+  <text x="1310" y="938" text-anchor="middle" font-family="monospace" font-size="8" fill="#ca8a04">cityService.create()</text>
+
+  <line x1="1340" y1="950" x2="1340" y2="1020" stroke="#9333ea" stroke-width="2" marker-end="url(#arrow-purple)"/>
+  <text x="1350" y="990" font-family="Arial, sans-serif" font-size="8" fill="#9333ea">suspend create()</text>
+
+  <!-- Step 8: Service + DB (below) -->
+  <rect x="1240" y="1025" width="140" height="50" fill="#faf5ff" stroke="#9333ea" rx="6"/>
+  <text x="1310" y="1045" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#6b21a8">⑧ Service → DB</text>
+  <text x="1310" y="1062" text-anchor="middle" font-family="monospace" font-size="8" fill="#6b21a8">INSERT INTO cities</text>
+
+  <!-- RESPONSE PATH: going back UP -->
+  <!-- Arrow turning right and going back up -->
+  <path d="M 1380 1050 L 1430 1050 L 1430 920 L 1390 920" stroke="#dc2626" stroke-width="2.5" fill="none" marker-end="url(#arrow-res)"/>
+  <text x="1440" y="1000" font-family="Arial, sans-serif" font-size="9" fill="#dc2626" transform="rotate(90, 1440, 1000)">Response path</text>
+
+  <!-- Response boxes along the right side -->
+  <rect x="1430" y="975" width="90" height="20" fill="#fef2f2" stroke="#dc2626" rx="4"/>
+  <text x="1475" y="989" text-anchor="middle" font-family="monospace" font-size="8" fill="#991b1b">201 Created</text>
+
+  <rect x="1430" y="950" width="90" height="20" fill="#fef2f2" stroke="#dc2626" rx="4"/>
+  <text x="1475" y="964" text-anchor="middle" font-family="monospace" font-size="8" fill="#991b1b">{ "id": 1 }</text>
+
+  <rect x="1430" y="898" width="90" height="20" fill="#fef2f2" stroke="#dc2626" rx="4"/>
+  <text x="1475" y="912" text-anchor="middle" font-family="monospace" font-size="8" fill="#991b1b">HTTP Response</text>
+
+  <!-- Response arrow going left to Browser -->
+  <line x1="1430" y1="908" x2="1390" y2="908" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arrow-res)"/>
+
+  <!-- Response continues through plugins on way back -->
+  <text x="1150" y="978" font-family="Arial, sans-serif" font-size="8" fill="#dc2626">← Response flows back through:</text>
+  <text x="1150" y="993" font-family="Arial, sans-serif" font-size="8" fill="#dc2626">   JWT → ContentNeg → Headers → CORS</text>
+
+  <!-- ===== BOTTOM: Error paths ===== -->
+  <rect x="40" y="1000" width="1150" height="70" fill="#f8fafc" stroke="#cbd5e1" rx="6"/>
+  <text x="60" y="1020" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#475569">Error / Edge-case paths:</text>
+
+  <rect x="60" y="1030" width="520" height="30" fill="#fef2f2" stroke="#fca5a5" rx="4"/>
+  <text x="70" y="1048" font-family="Arial, sans-serif" font-size="9" fill="#991b1b">⨯ 401 Unauthorized — JWT missing or invalid → authentication plugin rejects</text>
+
+  <rect x="600" y="1030" width="570" height="30" fill="#fef2f2" stroke="#fca5a5" rx="4"/>
+  <text x="610" y="1048" font-family="Arial, sans-serif" font-size="9" fill="#991b1b">⨯ 404 Not Found — Route matches but resource missing → <tspan font-family="monospace">call.respond(NotFound)</tspan></text>
+
+  <!-- ======================================================================== -->
+  <!-- SECTION 4: REFERENCE PANELS (bottom)                                    -->
+  <!-- ======================================================================== -->
+
+  <!-- Route Table panel -->
+  <rect x="20" y="1165" width="1040" height="250" fill="#ffffff" stroke="#cbd5e1" rx="10" filter="url(#shadow)"/>
+  <text x="540" y="1195" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1e293b">🗺️ Complete Route Table — URL → Controller → Service Mapping</text>
+
+  <!-- Table header -->
+  <rect x="40" y="1210" width="200" height="24" fill="#0f172a" rx="4"/>
+  <text x="140" y="1227" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="10" font-weight="bold">HTTP Method + Path</text>
+
+  <rect x="240" y="1210" width="180" height="24" fill="#0f172a" rx="4"/>
+  <text x="330" y="1227" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Controller Handler</text>
+
+  <rect x="420" y="1210" width="200" height="24" fill="#0f172a" rx="4"/>
+  <text x="520" y="1227" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Service → Model</text>
+
+  <rect x="620" y="1210" width="200" height="24" fill="#0f172a" rx="4"/>
+  <text x="720" y="1227" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Response (View)</text>
+
+  <rect x="820" y="1210" width="220" height="24" fill="#0f172a" rx="4"/>
+  <text x="930" y="1227" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Source File</text>
+
+  <!-- Row 1 -->
+  <rect x="40" y="1238" width="200" height="22" fill="#f0fdf4" rx="3"/>
+  <text x="50" y="1253" font-family="monospace" font-size="9" fill="#15803d">GET  /</text>
+
+  <rect x="240" y="1238" width="180" height="22" fill="#fefce8" rx="3"/>
+  <text x="250" y="1253" font-family="monospace" font-size="8" fill="#854d0e">call.respondText("Hello!")</text>
+
+  <rect x="420" y="1238" width="200" height="22" fill="#faf5ff" rx="3"/>
+  <text x="430" y="1253" font-family="Arial, sans-serif" font-size="8" fill="#6b21a8">— (no model)</text>
+
+  <rect x="620" y="1238" width="200" height="22" fill="#f0f9ff" rx="3"/>
+  <text x="630" y="1253" font-family="monospace" font-size="8" fill="#0369a1">Text("Hello, World!")</text>
+
+  <rect x="820" y="1238" width="220" height="22" fill="#f8fafc" rx="3"/>
+  <text x="830" y="1253" font-family="monospace" font-size="8" fill="#475569">Routing.kt</text>
+
+  <!-- Row 2 -->
+  <rect x="40" y="1264" width="200" height="22" fill="#f0fdf4" rx="3"/>
+  <text x="50" y="1279" font-family="monospace" font-size="9" fill="#15803d">POST /cities</text>
+
+  <rect x="240" y="1264" width="180" height="22" fill="#fefce8" rx="3"/>
+  <text x="250" y="1279" font-family="monospace" font-size="8" fill="#854d0e">call.receive(); create()</text>
+
+  <rect x="420" y="1264" width="200" height="22" fill="#faf5ff" rx="3"/>
+  <text x="430" y="1279" font-family="monospace" font-size="8" fill="#6b21a8">CityService.create(City)</text>
+
+  <rect x="620" y="1264" width="200" height="22" fill="#f0f9ff" rx="3"/>
+  <text x="630" y="1279" font-family="monospace" font-size="8" fill="#0369a1">201 + JSON { "id": 1 }</text>
+
+  <rect x="820" y="1264" width="220" height="22" fill="#f8fafc" rx="3"/>
+  <text x="830" y="1279" font-family="monospace" font-size="8" fill="#475569">Postgres.kt</text>
+
+  <!-- Row 3 -->
+  <rect x="40" y="1290" width="200" height="22" fill="#f0fdf4" rx="3"/>
+  <text x="50" y="1305" font-family="monospace" font-size="9" fill="#15803d">GET /cities/{id}</text>
+
+  <rect x="240" y="1290" width="180" height="22" fill="#fefce8" rx="3"/>
+  <text x="250" y="1305" font-family="monospace" font-size="8" fill="#854d0e">params["id"]; read()</text>
+
+  <rect x="420" y="1290" width="200" height="22" fill="#faf5ff" rx="3"/>
+  <text x="430" y="1305" font-family="monospace" font-size="8" fill="#6b21a8">CityService.read(id)</text>
+
+  <rect x="620" y="1290" width="200" height="22" fill="#f0f9ff" rx="3"/>
+  <text x="630" y="1305" font-family="monospace" font-size="8" fill="#0369a1">200 + JSON City</text>
+
+  <rect x="820" y="1290" width="220" height="22" fill="#f8fafc" rx="3"/>
+  <text x="830" y="1305" font-family="monospace" font-size="8" fill="#475569">Postgres.kt</text>
+
+  <!-- Row 4 -->
+  <rect x="40" y="1316" width="200" height="22" fill="#f0fdf4" rx="3"/>
+  <text x="50" y="1331" font-family="monospace" font-size="9" fill="#15803d">PUT /cities/{id}</text>
+
+  <rect x="240" y="1316" width="180" height="22" fill="#fefce8" rx="3"/>
+  <text x="250" y="1331" font-family="monospace" font-size="8" fill="#854d0e">receive(); update()</text>
+
+  <rect x="420" y="1316" width="200" height="22" fill="#faf5ff" rx="3"/>
+  <text x="430" y="1331" font-family="monospace" font-size="8" fill="#6b21a8">CityService.update(id)</text>
+
+  <rect x="620" y="1316" width="200" height="22" fill="#f0f9ff" rx="3"/>
+  <text x="630" y="1331" font-family="monospace" font-size="8" fill="#0369a1">200 OK</text>
+
+  <rect x="820" y="1316" width="220" height="22" fill="#f8fafc" rx="3"/>
+  <text x="830" y="1331" font-family="monospace" font-size="8" fill="#475569">Postgres.kt</text>
+
+  <!-- Row 5 -->
+  <rect x="40" y="1342" width="200" height="22" fill="#f0fdf4" rx="3"/>
+  <text x="50" y="1357" font-family="monospace" font-size="9" fill="#15803d">DELETE /cities/{id}</text>
+
+  <rect x="240" y="1342" width="180" height="22" fill="#fefce8" rx="3"/>
+  <text x="250" y="1357" font-family="monospace" font-size="8" fill="#854d0e">params["id"]; delete()</text>
+
+  <rect x="420" y="1342" width="200" height="22" fill="#faf5ff" rx="3"/>
+  <text x="430" y="1357" font-family="monospace" font-size="8" fill="#6b21a8">CityService.delete(id)</text>
+
+  <rect x="620" y="1342" width="200" height="22" fill="#f0f9ff" rx="3"/>
+  <text x="630" y="1357" font-family="monospace" font-size="8" fill="#0369a1">200 OK</text>
+
+  <rect x="820" y="1342" width="220" height="22" fill="#f8fafc" rx="3"/>
+  <text x="830" y="1357" font-family="monospace" font-size="8" fill="#475569">Postgres.kt</text>
+
+  <!-- Row 6 -->
+  <rect x="40" y="1368" width="200" height="22" fill="#f0fdf4" rx="3"/>
+  <text x="50" y="1383" font-family="monospace" font-size="9" fill="#15803d">GET /session/increment</text>
+
+  <rect x="240" y="1368" width="180" height="22" fill="#fefce8" rx="3"/>
+  <text x="250" y="1383" font-family="monospace" font-size="8" fill="#854d0e">sessions.get(); set()</text>
+
+  <rect x="420" y="1368" width="200" height="22" fill="#faf5ff" rx="3"/>
+  <text x="430" y="1383" font-family="monospace" font-size="8" fill="#6b21a8">MySession(count)</text>
+
+  <rect x="620" y="1368" width="200" height="22" fill="#f0f9ff" rx="3"/>
+  <text x="630" y="1383" font-family="monospace" font-size="8" fill="#0369a1">Text("Counter is ${c}")</text>
+
+  <rect x="820" y="1368" width="220" height="22" fill="#f8fafc" rx="3"/>
+  <text x="830" y="1383" font-family="monospace" font-size="8" fill="#475569">Routing.kt</text>
+
+
+  <!-- Source file map panel (right side) -->
+  <rect x="1080" y="1165" width="450" height="280" fill="#ffffff" stroke="#cbd5e1" rx="10" filter="url(#shadow)"/>
+  <text x="1305" y="1195" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1e293b">📁 Source File Map</text>
+
+  <text x="1100" y="1220" font-family="monospace" font-size="9" fill="#3b82f6">src/main/kotlin/</text>
+  <text x="1115" y="1240" font-family="monospace" font-size="9" fill="#475569">├── main.kt              ← Entry point</text>
+  <text x="1115" y="1260" font-family="monospace" font-size="9" fill="#475569">├── Http.kt               ← CORS, Compression, Headers</text>
+  <text x="1115" y="1280" font-family="monospace" font-size="9" fill="#475569">├── Monitoring.kt         ← CallId plugin</text>
+  <text x="1115" y="1300" font-family="monospace" font-size="9" fill="#475569">├── Serialization.kt      ← ContentNegotiation (JSON)</text>
+  <text x="1115" y="1320" font-family="monospace" font-size="9" fill="#475569">├── Security.kt           ← JWT Auth + Sessions</text>
+  <text x="1115" y="1340" font-family="monospace" font-size="9" fill="#475569">├── Routing.kt            ← General routes</text>
+  <text x="1115" y="1360" font-family="monospace" font-size="9" fill="#475569">├── Postgres.kt           ← DB + City CRUD routes</text>
+  <text x="1115" y="1380" font-family="monospace" font-size="9" fill="#475569">├── CitySchema.kt         ← City model + CityService</text>
+  <text x="1115" y="1400" font-family="monospace" font-size="9" fill="#475569">├── MySession.kt          ← Session data class</text>
+  <text x="1115" y="1420" font-family="monospace" font-size="9" fill="#475569">└── models/User.kt        ← User model + UserRoles enum</text>
+
+</svg>

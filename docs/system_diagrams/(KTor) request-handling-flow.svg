@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1400" height="1100" viewBox="0 0 1400 1100">
+  <defs>
+    <!-- Arrow marker -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#16a34a"/>
+    </marker>
+
+    <!-- Drop shadow filter -->
+    <filter id="shadow" x="-5%" y="-5%" width="115%" height="115%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-opacity="0.15"/>
+    </filter>
+
+    <!-- Gradient definitions -->
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e293b"/>
+      <stop offset="100%" style="stop-color:#334155"/>
+    </linearGradient>
+    <linearGradient id="pluginGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#eff6ff"/>
+      <stop offset="100%" style="stop-color:#dbeafe"/>
+    </linearGradient>
+    <linearGradient id="routeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0fdf4"/>
+      <stop offset="100%" style="stop-color:#dcfce7"/>
+    </linearGradient>
+    <linearGradient id="handlerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fefce8"/>
+      <stop offset="100%" style="stop-color:#fef9c3"/>
+    </linearGradient>
+    <linearGradient id="dbGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#faf5ff"/>
+      <stop offset="100%" style="stop-color:#f3e8ff"/>
+    </linearGradient>
+    <linearGradient id="responseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fef2f2"/>
+      <stop offset="100%" style="stop-color:#fee2e2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="1100" fill="#f8fafc" rx="8"/>
+
+  <!-- Title bar -->
+  <rect x="0" y="0" width="1400" height="60" fill="url(#headerGrad)" rx="8"/>
+  <rect x="0" y="30" width="1400" height="30" fill="url(#headerGrad)"/>
+  <text x="700" y="38" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="22" font-weight="bold">Openpress — KTor Request Lifecycle (Full Flow)</text>
+
+  <!-- ===================== LEGEND ===================== -->
+  <rect x="20" y="75" width="1360" height="50" fill="#ffffff" stroke="#cbd5e1" rx="6" filter="url(#shadow)"/>
+  <text x="40" y="100" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#475569">Legend:</text>
+  <rect x="120" y="86" width="16" height="16" fill="url(#pluginGrad)" stroke="#3b82f6" rx="3"/>
+  <text x="142" y="99" font-family="Arial, sans-serif" font-size="12" fill="#475569">Plugin Pipeline</text>
+  <rect x="280" y="86" width="16" height="16" fill="url(#routeGrad)" stroke="#16a34a" rx="3"/>
+  <text x="302" y="99" font-family="Arial, sans-serif" font-size="12" fill="#475569">Route Dispatcher</text>
+  <rect x="440" y="86" width="16" height="16" fill="url(#handlerGrad)" stroke="#ca8a04" rx="3"/>
+  <text x="462" y="99" font-family="Arial, sans-serif" font-size="12" fill="#475569">Handler / Controller</text>
+  <rect x="620" y="86" width="16" height="16" fill="url(#dbGrad)" stroke="#9333ea" rx="3"/>
+  <text x="642" y="99" font-family="Arial, sans-serif" font-size="12" fill="#475569">Database</text>
+  <rect x="760" y="86" width="16" height="16" fill="url(#responseGrad)" stroke="#dc2626" rx="3"/>
+  <text x="782" y="99" font-family="Arial, sans-serif" font-size="12" fill="#475569">Response</text>
+
+  <!-- ===================== 1. CLIENT ===================== -->
+  <rect x="50" y="155" width="180" height="70" fill="#ffffff" stroke="#64748b" stroke-width="2" rx="10" filter="url(#shadow)"/>
+  <text x="140" y="185" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="bold" fill="#1e293b">🌐 Client</text>
+  <text x="140" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#64748b">Browser / Mobile / Postman</text>
+
+  <!-- Arrow: Client → Netty -->
+  <line x1="230" y1="190" x2="290" y2="190" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="245" y="178" font-family="Arial, sans-serif" font-size="9" fill="#64748b">HTTP Request</text>
+  <text x="245" y="210" font-family="Arial, sans-serif" font-size="9" fill="#64748b">POST /cities</text>
+
+  <!-- ===================== 2. NETTY ENGINE ===================== -->
+  <rect x="300" y="145" width="200" height="90" fill="#f1f5f9" stroke="#475569" stroke-width="2" rx="10" filter="url(#shadow)"/>
+  <text x="400" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="bold" fill="#1e293b">🖧 Netty Engine</text>
+  <text x="400" y="195" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#475569">io.ktor.server.netty</text>
+  <text x="400" y="212" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#64748b">Port 8080</text>
+
+  <!-- Arrow: Netty → Plugin Pipeline -->
+  <line x1="500" y1="190" x2="560" y2="190" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
+  <text x="520" y="180" font-family="Arial, sans-serif" font-size="9" fill="#2563eb">Plugins</text>
+  <text x="520" y="210" font-family="Arial, sans-serif" font-size="9" fill="#2563eb">(in order)</text>
+
+  <!-- ===================== 3. PLUGIN PIPELINE ===================== -->
+  <!-- Plugin container -->
+  <rect x="570" y="130" width="260" height="370" fill="#ffffff" stroke="#3b82f6" stroke-width="2" rx="10" filter="url(#shadow)"/>
+  <text x="700" y="158" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1d4ed8">🔌 Plugin Pipeline</text>
+  <text x="700" y="174" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#64748b">application.yaml module order</text>
+
+  <!-- Plugin 1: CORS -->
+  <rect x="590" y="190" width="220" height="40" fill="url(#pluginGrad)" stroke="#3b82f6" rx="6"/>
+  <text x="700" y="207" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#1e40af">1. CORS</text>
+  <text x="700" y="222" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#3b82f6">Options, Put, Delete, Patch</text>
+
+  <!-- Arrow -->
+  <line x1="700" y1="230" x2="700" y2="245" stroke="#93c5fd" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+  <!-- Plugin 2: Compression -->
+  <rect x="590" y="248" width="220" height="40" fill="url(#pluginGrad)" stroke="#3b82f6" rx="6"/>
+  <text x="700" y="265" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#1e40af">2. Compression</text>
+  <text x="700" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#3b82f6">Decompress request body</text>
+
+  <!-- Arrow -->
+  <line x1="700" y1="288" x2="700" y2="303" stroke="#93c5fd" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+  <!-- Plugin 3: DefaultHeaders -->
+  <rect x="590" y="306" width="220" height="40" fill="url(#pluginGrad)" stroke="#3b82f6" rx="6"/>
+  <text x="700" y="323" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#1e40af">3. DefaultHeaders</text>
+  <text x="700" y="338" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#3b82f6">X-Engine: Ktor</text>
+
+  <!-- Arrow -->
+  <line x1="700" y1="346" x2="700" y2="361" stroke="#93c5fd" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+  <!-- Plugin 4: CallId -->
+  <rect x="590" y="364" width="220" height="40" fill="url(#pluginGrad)" stroke="#3b82f6" rx="6"/>
+  <text x="700" y="381" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#1e40af">4. CallId</text>
+  <text x="700" y="396" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#3b82f6">X-Request-Id tracking</text>
+
+  <!-- Arrow -->
+  <line x1="700" y1="404" x2="700" y2="419" stroke="#93c5fd" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+  <!-- Plugin 5: ContentNegotiation -->
+  <rect x="590" y="422" width="220" height="40" fill="url(#pluginGrad)" stroke="#3b82f6" rx="6"/>
+  <text x="700" y="439" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#1e40af">5. ContentNegotiation</text>
+  <text x="700" y="454" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#3b82f6">Deserialize JSON → @Serializable</text>
+
+  <!-- Plugin sub-note -->
+  <text x="700" y="472" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#93c5fd">│ call.receive&lt;City&gt;() │</text>
+
+  <!-- Arrow: Plugin Pipeline → Route Dispatcher -->
+  <line x1="830" y1="300" x2="890" y2="300" stroke="#16a34a" stroke-width="2" marker-end="url(#arrow-green)"/>
+  <text x="855" y="290" font-family="Arial, sans-serif" font-size="9" fill="#16a34a">Route</text>
+  <text x="855" y="318" font-family="Arial, sans-serif" font-size="9" fill="#16a34a">Match</text>
+
+  <!-- ===================== 4. AUTH / SESSIONS ===================== -->
+  <!-- These are installed in Security.kt but applied before routes -->
+  <rect x="590" y="480" width="220" height="14" fill="#eff6ff" stroke="#93c5fd" rx="3" stroke-dasharray="4,2"/>
+  <text x="700" y="491" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#3b82f6">JWT Auth + Sessions (checked after C.N.)</text>
+
+  <!-- ===================== 5. ROUTE DISPATCHER ===================== -->
+  <rect x="900" y="240" width="250" height="120" fill="url(#routeGrad)" stroke="#16a34a" stroke-width="2" rx="10" filter="url(#shadow)"/>
+  <text x="1025" y="268" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#15803d">📍 Route Dispatcher</text>
+  <text x="1025" y="288" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#16a34a">routing { }</text>
+
+  <!-- Route entries -->
+  <rect x="915" y="300" width="220" height="22" fill="#ffffff" stroke="#86efac" rx="4"/>
+  <text x="1025" y="315" text-anchor="middle" font-family="monospace" font-size="9" fill="#15803d">GET  /  → Hello World!</text>
+
+  <rect x="915" y="326" width="220" height="22" fill="#ffffff" stroke="#86efac" rx="4"/>
+  <text x="1025" y="341" text-anchor="middle" font-family="monospace" font-size="9" fill="#15803d">POST /cities → JSON body → City</text>
+
+  <!-- Arrow: Route → Handler -->
+  <line x1="1025" y1="360" x2="1025" y2="400" stroke="#ca8a04" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="1050" y="385" font-family="Arial, sans-serif" font-size="9" fill="#ca8a04">Match → Execute</text>
+
+  <!-- ===================== 6. HANDLER / CONTROLLER ===================== -->
+  <rect x="900" y="405" width="250" height="150" fill="url(#handlerGrad)" stroke="#ca8a04" stroke-width="2" rx="10" filter="url(#shadow)"/>
+  <text x="1025" y="430" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#854d0e">⚙️ Handler / Controller</text>
+  <text x="1025" y="448" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#ca8a04">Postgres.kt — City CRUD</text>
+
+  <!-- Code steps -->
+  <rect x="915" y="460" width="220" height="20" fill="#ffffff" stroke="#eab308" rx="4"/>
+  <text x="925" y="474" font-family="monospace" font-size="9" fill="#854d0e">1. call.receive&lt;City&gt;()</text>
+
+  <rect x="915" y="484" width="220" height="20" fill="#ffffff" stroke="#eab308" rx="4"/>
+  <text x="925" y="498" font-family="monospace" font-size="9" fill="#854d0e">2. cityService.create(city)</text>
+
+  <rect x="915" y="508" width="220" height="20" fill="#ffffff" stroke="#eab308" rx="4"/>
+  <text x="925" y="522" font-family="monospace" font-size="9" fill="#854d0e">3. call.respond(Created, id)</text>
+
+  <!-- Arrow: Handler → Service → DB (split) -->
+  <line x1="1025" y1="555" x2="1025" y2="590" stroke="#9333ea" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="1045" y="575" font-family="Arial, sans-serif" font-size="9" fill="#9333ea">cityService.</text>
+
+  <!-- ===================== 7. SERVICE LAYER ===================== -->
+  <rect x="900" y="595" width="250" height="80" fill="url(#dbGrad)" stroke="#9333ea" stroke-width="2" rx="10" filter="url(#shadow)"/>
+  <text x="1025" y="618" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#6b21a8">🗄️ Service (DAO)</text>
+  <text x="1025" y="636" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#9333ea">CityService.kt</text>
+
+  <rect x="915" y="648" width="220" height="20" fill="#ffffff" stroke="#c084fc" rx="4"/>
+  <text x="925" y="662" font-family="monospace" font-size="9" fill="#6b21a8">suspend fun create()</text>
+
+  <!-- Arrow: Service → DB Connection -->
+  <line x1="1025" y1="675" x2="1025" y2="710" stroke="#9333ea" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ===================== 8. DATABASE ===================== -->
+  <rect x="900" y="715" width="250" height="100" fill="url(#dbGrad)" stroke="#9333ea" stroke-width="2" rx="10" filter="url(#shadow)"/>
+  <text x="1025" y="740" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#6b21a8">💾 Database</text>
+
+  <!-- DB choice box -->
+  <rect x="915" y="752" width="220" height="24" fill="#ffffff" stroke="#c084fc" rx="4"/>
+  <text x="925" y="767" font-family="Arial, sans-serif" font-size="10" fill="#6b21a8">H2 (embedded) ← default</text>
+
+  <rect x="915" y="780" width="220" height="24" fill="#ffffff" stroke="#c084fc" rx="4"/>
+  <text x="925" y="795" font-family="Arial, sans-serif" font-size="10" fill="#6b21a8">PostgreSQL ← production</text>
+
+  <!-- SQL action -->
+  <text x="1025" y="812" text-anchor="middle" font-family="monospace" font-size="8" fill="#a855f7">INSERT INTO cities VALUES (...)</text>
+
+  <!-- ===================== 9. RESPONSE PATH ===================== -->
+  <!-- Arrow up from handler to response -->
+  <path d="M 1400 480 L 1380 480 L 1380 190 L 1350 190" stroke="#dc2626" stroke-width="2" fill="none" marker-end="url(#arrow)" stroke-dasharray="6,3"/>
+  <text x="1390" y="300" font-family="Arial, sans-serif" font-size="9" fill="#dc2626" transform="rotate(-90, 1390, 300)">Response</text>
+
+  <rect x="1170" y="145" width="200" height="90" fill="url(#responseGrad)" stroke="#dc2626" stroke-width="2" rx="10" filter="url(#shadow)"/>
+  <text x="1270" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="bold" fill="#991b1b">📤 Response</text>
+  <text x="1270" y="195" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#dc2626">call.respond()</text>
+
+  <!-- Response sub-steps -->
+  <rect x="1185" y="205" width="170" height="18" fill="#ffffff" stroke="#fca5a5" rx="3"/>
+  <text x="1270" y="218" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#991b1b">ContentNegotiation serializes</text>
+
+  <rect x="1185" y="226" width="170" height="18" fill="#ffffff" stroke="#fca5a5" rx="3"/>
+  <text x="1270" y="239" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#991b1b">DefaultHeaders adds X-Engine</text>
+
+  <!-- Arrow: Response → Client -->
+  <line x1="1170" y1="190" x2="1100" y2="190" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="1110" y="178" font-family="Arial, sans-serif" font-size="9" fill="#dc2626">HTTP 201 Created</text>
+  <text x="1110" y="210" font-family="Arial, sans-serif" font-size="9" fill="#dc2626">JSON: { "id": 1 }</text>
+
+  <!-- ===================== BOTTOM INFO PANELS ===================== -->
+
+  <!-- Module load order panel -->
+  <rect x="50" y="620" width="480" height="200" fill="#ffffff" stroke="#cbd5e1" rx="8" filter="url(#shadow)"/>
+  <text x="290" y="650" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#1e293b">📋 Module Load Order (application.yaml)</text>
+
+  <rect x="70" y="665" width="440" height="24" fill="#f1f5f9" stroke="#e2e8f0" rx="4"/>
+  <text x="80" y="682" font-family="monospace" font-size="9" fill="#475569"> 1. HttpKt.configureHttp        → CORS + Compression + DefaultHeaders</text>
+
+  <rect x="70" y="693" width="440" height="24" fill="#f1f5f9" stroke="#e2e8f0" rx="4"/>
+  <text x="80" y="710" font-family="monospace" font-size="9" fill="#475569"> 2. MonitoringKt.configureMonitoring  → CallId</text>
+
+  <rect x="70" y="721" width="440" height="24" fill="#f1f5f9" stroke="#e2e8f0" rx="4"/>
+  <text x="80" y="738" font-family="monospace" font-size="9" fill="#475569"> 3. SerializationKt.configureSerialization → ContentNegotiation (JSON)</text>
+
+  <rect x="70" y="749" width="440" height="24" fill="#f1f5f9" stroke="#e2e8f0" rx="4"/>
+  <text x="80" y="766" font-family="monospace" font-size="9" fill="#475569"> 4. SecurityKt.configureSecurity → JWT Auth + Cookie Sessions</text>
+
+  <rect x="70" y="777" width="440" height="24" fill="#f1f5f9" stroke="#e2e8f0" rx="4"/>
+  <text x="80" y="794" font-family="monospace" font-size="9" fill="#475569"> 5. PostgresKt.configurePostgres  → DB Connection + City CRUD Routes</text>
+
+  <rect x="70" y="805" width="440" height="24" fill="#f1f5f9" stroke="#e2e8f0" rx="4"/>
+  <text x="80" y="822" font-family="monospace" font-size="9" fill="#475569"> 6. RoutingKt.configureRouting   → General Routes (/, /static, /json, /session)</text>
+
+  <!-- Dependencies panel -->
+  <rect x="560" y="520" width="280" height="300" fill="#ffffff" stroke="#cbd5e1" rx="8" filter="url(#shadow)"/>
+  <text x="700" y="550" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#1e293b">📦 Key Dependencies</text>
+
+  <circle cx="580" cy="572" r="4" fill="#3b82f6"/>
+  <text x="592" y="576" font-family="Arial, sans-serif" font-size="10" fill="#475569">ktor-server-netty (engine)</text>
+
+  <circle cx="580" cy="596" r="4" fill="#3b82f6"/>
+  <text x="592" y="600" font-family="Arial, sans-serif" font-size="10" fill="#475569">ktor-server-core (routing)</text>
+
+  <circle cx="580" cy="620" r="4" fill="#3b82f6"/>
+  <text x="592" y="624" font-family="Arial, sans-serif" font-size="10" fill="#475569">ktor-server-auth-jwt</text>
+
+  <circle cx="580" cy="644" r="4" fill="#3b82f6"/>
+  <text x="592" y="648" font-family="Arial, sans-serif" font-size="10" fill="#475569">ktor-server-content-negotiation</text>
+
+  <circle cx="580" cy="668" r="4" fill="#3b82f6"/>
+  <text x="592" y="672" font-family="Arial, sans-serif" font-size="10" fill="#475569">ktor-serialization-kotlinx-json</text>
+
+  <circle cx="580" cy="692" r="4" fill="#3b82f6"/>
+  <text x="592" y="696" font-family="Arial, sans-serif" font-size="10" fill="#475569">ktor-server-cors</text>
+
+  <circle cx="580" cy="716" r="4" fill="#3b82f6"/>
+  <text x="592" y="720" font-family="Arial, sans-serif" font-size="10" fill="#475569">postgresql (JDBC driver)</text>
+
+  <circle cx="580" cy="740" r="4" fill="#3b82f6"/>
+  <text x="592" y="744" font-family="Arial, sans-serif" font-size="10" fill="#475569">h2database (embedded)</text>
+
+  <circle cx="580" cy="764" r="4" fill="#3b82f6"/>
+  <text x="592" y="768" font-family="Arial, sans-serif" font-size="10" fill="#475569">logback-classic (logging)</text>
+
+  <circle cx="580" cy="788" r="4" fill="#3b82f6"/>
+  <text x="592" y="792" font-family="Arial, sans-serif" font-size="10" fill="#475569">ktor-simple-cache</text>
+
+  <!-- File structure panel -->
+  <rect x="880" y="830" width="480" height="250" fill="#ffffff" stroke="#cbd5e1" rx="8" filter="url(#shadow)"/>
+  <text x="1120" y="860" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#1e293b">📁 Source File Map</text>
+
+  <text x="900" y="885" font-family="monospace" font-size="10" fill="#3b82f6">src/main/kotlin/</text>
+  <text x="920" y="905" font-family="monospace" font-size="10" fill="#475569">├── main.kt          ← Entry: EngineMain.main(args)</text>
+  <text x="920" y="925" font-family="monospace" font-size="10" fill="#475569">├── Http.kt           ← CORS + Compression + DefaultHeaders</text>
+  <text x="920" y="945" font-family="monospace" font-size="10" fill="#475569">├── Monitoring.kt     ← CallId</text>
+  <text x="920" y="965" font-family="monospace" font-size="10" fill="#475569">├── Serialization.kt  ← ContentNegotiation</text>
+  <text x="920" y="985" font-family="monospace" font-size="10" fill="#475569">├── Security.kt       ← JWT Auth + Sessions</text>
+  <text x="920" y="1005" font-family="monospace" font-size="10" fill="#475569">├── Postgres.kt       ← DB connection + City CRUD routes</text>
+  <text x="920" y="1025" font-family="monospace" font-size="10" fill="#475569">├── Routing.kt        ← General routes</text>
+  <text x="920" y="1045" font-family="monospace" font-size="10" fill="#475569">├── CitySchema.kt     ← City model + CityService (DAO)</text>
+  <text x="920" y="1065" font-family="monospace" font-size="10" fill="#475569">├── MySession.kt      ← Session data class</text>
+  <text x="920" y="1085" font-family="monospace" font-size="10" fill="#475569">└── models/User.kt    ← User model + UserRoles enum</text>
+
+</svg>

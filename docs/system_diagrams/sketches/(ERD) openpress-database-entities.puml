@@ -1,0 +1,408 @@
+@startuml
+' ============================================================
+' Openpress — Database Entity-Relationship Diagram (27 tables)
+' ============================================================
+
+!define PK <color:#b91c1c><b>PK</b></color>
+!define FK <color:#2563eb><b>FK</b></color>
+!define UQ <color:#059669><b>UQ</b></color>
+
+skinparam backgroundColor #F8FAFC
+skinparam defaultFontName Helvetica
+skinparam defaultFontSize 11
+skinparam shadowing true
+skinparam packageBorderColor #CBD5E1
+skinparam packageBorderThickness 1
+skinparam packageCornerRadius 10
+skinparam packageFontSize 14
+skinparam packageFontColor #1E293B
+skinparam packageFontStyle bold
+
+skinparam entity {
+    BackgroundColor #FFFFFF
+    BorderColor #475569
+    BorderThickness 1
+    FontSize 12
+    FontColor #1E293B
+}
+
+hide empty fields
+left to right direction
+
+' ============================================================
+' DOMAIN 1: AUTH & IDENTITY
+' ============================================================
+package "Auth & Identity" #FEF2F2 {
+  entity "User" as user {
+    PK id : Int (auto)
+    --
+    <color:#059669>email : String (unique)</color>
+    <color:#059669>username : String (unique)</color>
+    password_hash : String
+    display_name : String
+    role : UserRoles
+    auth_status : Boolean
+    avatar_url : String?
+    created_at : Timestamp
+    updated_at : Timestamp
+  }
+
+  entity "Permission" as permission {
+    PK id : Int (auto)
+    --
+    <color:#059669>name : String (unique)</color>
+    <color:#059669>slug : String (unique)</color>
+    description : String?
+  }
+
+  entity "RolePermission" as rolepermission {
+    PK, FK role : UserRoles
+    PK, FK permission_id : Int
+    --
+  }
+
+  entity "Address" as address {
+    PK id : Int (auto)
+    --
+    FK user_id : Int
+    label : String
+    street : String
+    city : String
+    state : String
+    zip_code : String
+    country : String
+    is_default : Boolean
+  }
+}
+
+' ============================================================
+' DOMAIN 2: CONTENT / BLOG
+' ============================================================
+package "Content / Blog" #F0FDF4 {
+  entity "Post" as post {
+    PK id : Int (auto)
+    --
+    title : String
+    <color:#059669>slug : String (unique)</color>
+    content : Text
+    excerpt : String?
+    featured_image_url : String?
+    FK author_id : Int
+    is_published : Boolean
+    published_at : Timestamp?
+    created_at : Timestamp
+    updated_at : Timestamp
+  }
+
+  entity "PostCategory" as postcategory {
+    PK id : Int (auto)
+    --
+    <color:#059669>name : String (unique)</color>
+    <color:#059669>slug : String (unique)</color>
+    description : String?
+  }
+
+  entity "PostCategoryMap" as postcatmap {
+    PK, FK post_id : Int
+    PK, FK category_id : Int
+    --
+  }
+
+  entity "Tag" as tag {
+    PK id : Int (auto)
+    --
+    <color:#059669>name : String (unique)</color>
+    <color:#059669>slug : String (unique)</color>
+  }
+
+  entity "PostTag" as posttag {
+    PK, FK post_id : Int
+    PK, FK tag_id : Int
+    --
+  }
+
+  entity "Comment" as comment {
+    PK id : Int (auto)
+    --
+    FK post_id : Int
+    FK author_id : Int
+    FK parent_id : Int?    (self-ref)
+    content : Text
+    is_approved : Boolean
+    created_at : Timestamp
+  }
+}
+
+' ============================================================
+' DOMAIN 3: CATALOG / SHOP
+' ============================================================
+package "Catalog / Shop" #EFF6FF {
+  entity "Category" as category {
+    PK id : Int (auto)
+    --
+    <color:#059669>name : String (unique)</color>
+    <color:#059669>slug : String (unique)</color>
+    description : String?
+    image_url : String?
+    FK parent_id : Int?    (self-ref)
+    sort_order : Int
+    is_active : Boolean
+    created_at : Timestamp
+  }
+
+  entity "Product" as product {
+    PK id : Int (auto)
+    --
+    name : String
+    <color:#059669>slug : String (unique)</color>
+    description : String?
+    price : Decimal
+    compare_price : Decimal?
+    stock_quantity : Int
+    <color:#059669>sku : String (unique)</color>
+    image_url : String?
+    gallery : JSON?
+    FK category_id : Int
+    is_active : Boolean
+    created_at : Timestamp
+    updated_at : Timestamp
+  }
+
+  entity "ProductVariant" as variant {
+    PK id : Int (auto)
+    --
+    FK product_id : Int
+    name : String
+    <color:#059669>sku : String (unique)</color>
+    price : Decimal?
+    stock_quantity : Int
+  }
+
+  entity "ProductAttribute" as attribute {
+    PK id : Int (auto)
+    --
+    FK product_id : Int
+    name : String
+    value : String
+  }
+
+  entity "ProductImage" as productimage {
+    PK id : Int (auto)
+    --
+    FK product_id : Int
+    url : String
+    alt_text : String?
+    sort_order : Int
+  }
+}
+
+' ============================================================
+' DOMAIN 4: CART & CHECKOUT
+' ============================================================
+package "Cart & Checkout" #FFF7ED {
+  entity "Cart" as cart {
+    PK id : Int (auto)
+    --
+    FK user_id : Int
+    created_at : Timestamp
+    updated_at : Timestamp
+  }
+
+  entity "CartItem" as cartitem {
+    PK id : Int (auto)
+    --
+    FK cart_id : Int
+    FK product_id : Int
+    FK variant_id : Int?
+    quantity : Int
+  }
+}
+
+' ============================================================
+' DOMAIN 5: ORDERS & FULFILLMENT
+' ============================================================
+package "Orders & Fulfillment" #FEF3C7 {
+  entity "Order" as order {
+    PK id : Int (auto)
+    --
+    FK user_id : Int
+    status : OrderStatus
+    total_amount : Decimal
+    subtotal : Decimal
+    shipping_cost : Decimal
+    tax_amount : Decimal
+    FK shipping_address_id : Int?
+    notes : String?
+    created_at : Timestamp
+    updated_at : Timestamp
+  }
+
+  entity "OrderItem" as orderitem {
+    PK id : Int (auto)
+    --
+    FK order_id : Int
+    FK product_id : Int
+    FK variant_id : Int?
+    quantity : Int
+    unit_price : Decimal
+  }
+
+  entity "Payment" as payment {
+    PK id : Int (auto)
+    --
+    FK order_id : Int
+    method : String
+    transaction_id : String?
+    status : String
+    amount : Decimal
+    paid_at : Timestamp?
+  }
+
+  entity "Shipment" as shipment {
+    PK id : Int (auto)
+    --
+    FK order_id : Int
+    carrier : String
+    tracking_number : String?
+    status : String
+    shipped_at : Timestamp?
+    estimated_delivery_at : Timestamp?
+  }
+}
+
+' ============================================================
+' DOMAIN 6: INVENTORY
+' ============================================================
+package "Inventory" #F1F5F9 {
+  entity "StockMovement" as stockmovement {
+    PK id : Int (auto)
+    --
+    FK product_id : Int
+    FK variant_id : Int?
+    quantity : Int
+    type : StockMovementType
+    reference_id : Int?
+    notes : String?
+    created_at : Timestamp
+  }
+}
+
+' ============================================================
+' DOMAIN 7: ADMIN / SYSTEM
+' ============================================================
+package "Admin / System" #FAF5FF {
+  entity "Log" as log {
+    PK id : Int (auto)
+    --
+    FK user_id : Int?
+    action : String
+    entity_type : String
+    entity_id : Int?
+    details : JSON?
+    ip_address : String?
+    user_agent : String?
+    created_at : Timestamp
+  }
+
+  entity "Setting" as setting {
+    PK id : Int (auto)
+    --
+    <color:#059669>key : String (unique)</color>
+    value : Text
+    description : String?
+    -- Example keys:
+    -- site.title        → "My Store"
+    -- site.tagline      → "Best products online"
+    -- site.logo_url     → "/media/logo.png"
+    -- theme.primary_color   → "#3B82F6"
+    -- theme.secondary_color → "#10B981"
+    -- theme.font_family     → "Inter, sans-serif"
+    -- theme.layout         → "boxed" | "full-width"
+    -- theme.border_radius  → "8"
+  }
+
+  entity "Media" as media {
+    PK id : Int (auto)
+    --
+    file_name : String
+    file_path : String
+    file_size : Long
+    mime_type : String
+    FK uploaded_by_id : Int
+    alt_text : String?
+    created_at : Timestamp
+  }
+
+  entity "Page" as page {
+    PK id : Int (auto)
+    --
+    title : String
+    <color:#059669>slug : String (unique)</color>
+    content : Text
+    is_published : Boolean
+    created_at : Timestamp
+    updated_at : Timestamp
+  }
+
+  entity "Notification" as notification {
+    PK id : Int (auto)
+    --
+    FK user_id : Int
+    type : String
+    message : String
+    is_read : Boolean
+    link : String?
+    created_at : Timestamp
+  }
+}
+
+' ============================================================
+' RELATIONSHIPS
+' ============================================================
+
+' --- AUTH relationships ---
+user ||--o{ address : "has"
+user ||--o{ rolepermission : "grants"
+permission ||--o{ rolepermission : "assigned to"
+
+' --- CONTENT relationships ---
+user ||--o{ post : "authors"
+post ||--o{ postcatmap : "categorised in"
+postcategory ||--o{ postcatmap : "contains"
+post ||--o{ posttag : "tagged with"
+tag ||--o{ posttag : "used in"
+post ||--o{ comment : "has"
+user ||--o{ comment : "writes"
+comment ||--o{ comment : "replies to"  : parent_id
+
+' --- CATALOG relationships ---
+category ||--o{ category : "parent of"  : parent_id
+category ||--o{ product : "contains"
+product ||--o{ variant : "has"
+product ||--o{ attribute : "has"
+product ||--o{ productimage : "has images"
+
+' --- CART relationships ---
+user ||--|| cart : "owns"
+cart ||--o{ cartitem : "contains"
+product ||--o{ cartitem : "added to cart"
+variant ||--o{ cartitem : "variant selected"
+
+' --- ORDER relationships ---
+user ||--o{ order : "places"
+order ||--o{ orderitem : "includes"
+product ||--o{ orderitem : "ordered"
+variant ||--o{ orderitem : "variant ordered"
+order ||--|| payment : "has"
+order ||--o{ shipment : "shipped via"
+
+' --- INVENTORY relationships ---
+product ||--o{ stockmovement : "tracked by"
+variant ||--o{ stockmovement : "variant movement"
+
+' --- ADMIN relationships ---
+user ||--o{ log : "generates"
+user ||--o{ notification : "receives"
+user ||--o{ media : "uploads"
+
+@enduml

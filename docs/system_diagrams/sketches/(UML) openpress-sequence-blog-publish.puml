@@ -1,0 +1,39 @@
+@startuml
+title Openpress — Blog Post Publishing Flow
+
+actor "Author" as author
+participant "PostController" as ctrl #FEF2F2
+participant "PostService" as svc #FFF7ED
+participant "PostRepository" as repo #EFF6FF
+participant "PostCategoryRepository" as catrepo #EFF6FF
+database "Database" as db #FAF5FF
+
+author -> ctrl: POST /posts { title, content, categoryIds, tags }
+ctrl -> svc: createPost(post)
+svc -> repo: create(post)
+repo -> db: INSERT INTO posts (title, slug, content, author_id)
+db --> repo: Post (with id)
+repo --> svc: postId
+
+loop for each categoryId
+  svc -> catrepo: addPostCategory(postId, categoryId)
+  catrepo -> db: INSERT INTO post_category_map
+end
+
+loop for each tag
+  svc -> repo: addPostTag(postId, tagId)
+  repo -> db: INSERT INTO post_tags
+end
+
+svc --> ctrl: Post with id, slug
+ctrl --> author: 201 Created + { post }
+
+author -> ctrl: PUT /posts/{id}/publish
+ctrl -> svc: publishPost(id)
+svc -> repo: update(id, isPublished=true, publishedAt=now)
+repo -> db: UPDATE posts SET published=true
+db --> repo: success
+svc -> svc: Generate slug
+svc --> ctrl: Post (published)
+ctrl --> author: 200 OK + { post }
+@enduml
